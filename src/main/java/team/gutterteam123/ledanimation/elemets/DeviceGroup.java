@@ -2,7 +2,7 @@ package team.gutterteam123.ledanimation.elemets;
 
 public class DeviceGroup implements Controllable {
     @Override
-    public void setChannel(ChannelType channel, float value) {
+    public void setChannel(ChannelType channel, short value) {
         
     }
 

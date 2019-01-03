@@ -8,6 +8,11 @@ import java.util.Map;
 public class Device implements Controllable {
 
     private Map<ChannelType, Integer> channels = new HashMap<>();
+    private String name;
+
+    public Device(String name) {
+        this.name = name;
+    }
 
     @Override
     public void setChannel(ChannelType channel, short value) {
@@ -16,6 +21,6 @@ public class Device implements Controllable {
 
     @Override
     public String displayName() {
-        return null;
+        return name;
     }
 }
