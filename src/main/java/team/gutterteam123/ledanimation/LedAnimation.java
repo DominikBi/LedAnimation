@@ -16,7 +16,7 @@ public class LedAnimation extends Application implements WebApplicationType {
 
 
     public static LedAnimation getInstance() {
-        return LinkBase.getApplicationManager().getApplicationByClass(LedAnimation.class);
+        return (LedAnimation) LinkBase.getApplicationManager().getApplicationByClass(LedAnimation.class);
     }
 
     public void setChannelSilent(int channel, short value) {

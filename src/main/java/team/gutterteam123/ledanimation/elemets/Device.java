@@ -10,7 +10,7 @@ public class Device implements Controllable {
     private Map<ChannelType, Integer> channels = new HashMap<>();
 
     @Override
-    public void setChannel(ChannelType channel, float value) {
+    public void setChannel(ChannelType channel, short value) {
         LedAnimation.getInstance().setChannel(channels.get(channel), value);
     }
 
