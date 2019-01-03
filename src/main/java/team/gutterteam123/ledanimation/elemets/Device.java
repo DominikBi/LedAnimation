@@ -20,6 +20,11 @@ public class Device implements Controllable {
     }
 
     @Override
+    public ChannelType getChannels() {
+        return null;
+    }
+
+    @Override
     public String displayName() {
         return name;
     }

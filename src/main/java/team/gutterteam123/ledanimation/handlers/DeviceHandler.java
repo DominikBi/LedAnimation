@@ -9,9 +9,11 @@ import team.gutterteam123.ledanimation.elemets.Device;
 
 @Mapping(value = "devices/**")
 public class DeviceHandler  {
-        public void create(@RequiredGet( value = "name") String name, Response response){
-            LedAnimation.getInstance().getDevices().putIfAbsent(name, new Device(name));
-            response.redirect("/devices/", false);
-        }
+
+    public void create(@RequiredGet( value = "name") String name, Response response){
+        LedAnimation.getInstance().getDevices().putIfAbsent(name, new Device(name));
+        response.redirect("/devices/", false);
+    }
+
 }
 

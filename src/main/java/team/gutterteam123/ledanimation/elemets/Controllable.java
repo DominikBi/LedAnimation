@@ -4,6 +4,8 @@ public interface Controllable {
 
     void setChannel(ChannelType channel, short value);
 
+    ChannelType getChannels();
+
     String displayName();
 
 }
