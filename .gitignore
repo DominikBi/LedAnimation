@@ -24,7 +24,6 @@ hs_err_pid*
 .idea/markdown-navigator.xml
 .idea/markdown-navigator/
 .idea/misc.xml
-.idea/modules.xml
 .idea/workspace.xml
 target/classes/disabled_paths_3.txt
 target/generated-sources/
