@@ -29,12 +29,13 @@ public class LedAnimation extends Application implements WebApplicationType {
 
     public void setChannel(int channel, short value) {
         setChannelSilent(channel, value);
-        olaClient.sendDmx(1, dmxChannels);
+        getLogger().debug("setting channel " + channel + " to " + value);
+        //(olaClient.sendDmx(1, dmxChannels);
     }
 
     @Override
     public void start(BootContext bootContext) throws Exception {
-        olaClient = new OlaClient();
+        //olaClient = new OlaClient();
         setWebServer(new NettyWebServer(this));
         listen(5555);
     }
