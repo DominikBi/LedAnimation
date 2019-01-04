@@ -19,7 +19,6 @@ public class LedAnimation extends Application implements WebApplicationType {
     private OlaClient olaClient;
     private Map<String, Controllable> devices = new HashMap<>();
 
-
     public static LedAnimation getInstance() {
         return LinkBase.getApplicationManager().getApplicationByClass(LedAnimation.class);
     }
