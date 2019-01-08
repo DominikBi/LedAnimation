@@ -15,7 +15,15 @@ public class DeviceHandler  {
     }
     @Mapping(value = "devices/delete")
     public void delete(@RequiredGet(value = "name") String name, Response response){
-        LedAnimation.getInstance().getDevices().remove(name);
+        try {
+            LedAnimation.getInstance().getDevices().remove(name);
+        } catch (Exception NameNotFound){
+            //info-popup
+        }
+    }
+    @Mapping(value = "devices/createAnimation")
+    public void createAnimation(@RequiredGet(value = "AnimationName") String name, Response response){
+
     }
 
 }
