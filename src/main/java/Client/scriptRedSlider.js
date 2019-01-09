@@ -1,10 +1,14 @@
 
   window.addEventListener("load", function(){
-    var slider = document.querySelector("input[type='range']");
+    var sliders = document.querySelector("input[type='range']");
 
-    slider.addEventListener("change", function(){
- var valueRed = document.getElementById("sliderRed").value;
-    document.querySelector(".range span").innerHTML = valueRed;
-
+for(var index = 0; index < sliders.length; index++){
+    slider = sliders[index];
+    alert("asd")
+slider.addEventListener("change", function(){
+    var value = slider.value;
+    Console.info(value);
+    document.querySelector(".range span").innerHTML = value;
     });
-    });
+}
+ });
