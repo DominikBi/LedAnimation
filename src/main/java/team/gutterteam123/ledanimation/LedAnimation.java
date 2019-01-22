@@ -38,7 +38,6 @@ public class LedAnimation extends Application implements WebApplicationType {
         //olaClient = new OlaClient();
         setWebServer(new NettyWebServer(this));
         listen(5555);
-
     }
 
     @Override
