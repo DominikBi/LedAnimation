@@ -1,8 +1,9 @@
 package team.gutterteam123.ledanimation.elemets;
 
+public class AnimationButton implements ControllableAnimation {
 
-public class AnimationButton implements ControllableAnimation{
-public String name;
+    public String name;
+
     @Override
     public void createAnimation(short AnimationId, String name) {
         Animation animation = new Animation();
@@ -10,9 +11,10 @@ public String name;
         animation.id = AnimationId;
     }
 
-
     @Override
-    public short getAnimationId() { return 0; }
+    public short getAnimationId() {
+        return 0;
+    }
 
     @Override
     public String displayAnimationName() {

@@ -19,24 +19,7 @@
         <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="module-library">
-      <library name="Maven: davidlib:WebApi:1.9.9">
-        <CLASSES>
-          <root url="jar://$MODULE_DIR$/libs/davidlib/WebApi-1.9.9.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
-      <library name="Maven: davidlib:StartUp:1.9.9">
-        <CLASSES>
-          <root url="jar://$MODULE_DIR$/libs/davidlib/StartUp-1.9.9.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
+    <orderEntry type="library" name="Maven: io.github.splotycode.mosaik:Mosaik-All:2.2.3" level="project" />
     <orderEntry type="library" name="Maven: org.projectlombok:lombok:1.18.4" level="project" />
     <orderEntry type="library" name="Maven: com.google.protobuf:protobuf-java:2.4.1" level="project" />
     <orderEntry type="library" name="Maven: org.json:json:20180813" level="project" />

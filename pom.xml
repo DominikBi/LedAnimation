@@ -12,14 +12,6 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
-    <repositories>
-        <repository>
-            <id>local-project</id>
-            <name>Local Project Repository</name>
-            <url>file://${project.basedir}/libs</url>
-        </repository>
-    </repositories>
-
     <dependencies>
         <dependency>
             <groupId>ola</groupId>
@@ -29,18 +21,9 @@
             <systemPath>${project.basedir}/libs/ola/ola-java-client-0.0.1.jar</systemPath>
         </dependency>
         <dependency>
-            <groupId>davidlib</groupId>
-            <artifactId>WebApi</artifactId>
-            <version>1.9.9</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/libs/davidlib/WebApi-1.9.9.jar</systemPath>
-        </dependency>
-        <dependency>
-            <groupId>davidlib</groupId>
-            <artifactId>StartUp</artifactId>
-            <version>1.9.9</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/libs/davidlib/StartUp-1.9.9.jar</systemPath>
+            <groupId>io.github.splotycode.mosaik</groupId>
+            <artifactId>Mosaik-All</artifactId>
+            <version>2.2.3</version>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -53,11 +36,6 @@
             <version>2.4.1</version>
         </dependency>
         <dependency>
-            <groupId>team.gutterteam123</groupId>
-            <artifactId>LedAnimations</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
-        <dependency>
             <groupId>org.json</groupId>
             <artifactId>json</artifactId>
             <version>20180813</version>
@@ -68,6 +46,18 @@
     <build>
         <plugins>
             <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>1.2.1</version>
+                <configuration>
+                    <classpathScope>compile</classpathScope>
+                    <mainClass>io.github.splotycode.mosaik.startup.Main</mainClass>
+                    <environmentVariables>
+                        <mosaik.appname>LedAnimations</mosaik.appname>
+                    </environmentVariables>
+                </configuration>
+            </plugin>
+            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
@@ -77,31 +67,38 @@
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <version>2.4</version>
-                <configuration>
-                    <archive>
-                        <manifest>
-                            <mainClass>de.splotycode.davidlib.startup.Main</mainClass>
-                        </manifest>
-                    </archive>
-                </configuration>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>copy-dependencies</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.directory}/bin</outputDirectory>
+                            <overWriteReleases>false</overWriteReleases>
+                            <overWriteSnapshots>false</overWriteSnapshots>
+                            <overWriteIfNewer>true</overWriteIfNewer>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-shade-plugin</artifactId>
-                <version>1.6</version>
+                <artifactId>maven-jar-plugin</artifactId>
                 <configuration>
-                    <createDependencyReducedPom>false</createDependencyReducedPom>
+                    <archive>
+                        <manifest>
+                            <addClasspath>true</addClasspath>
+                            <classpathPrefix>bin/</classpathPrefix>
+                            <mainClass>io.github.splotycode.mosaik.startup.Main</mainClass>
+                        </manifest>
+                        <manifestEntries>
+                            <Class-Path>bin/ola-java-client-1.9.9.jar</Class-Path>
+                        </manifestEntries>
+                    </archive>
                 </configuration>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>shade</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
         </plugins>
     </build>

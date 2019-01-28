@@ -1,10 +1,10 @@
 package team.gutterteam123.ledanimation.handlers;
 
-import me.david.webapi.handler.anotation.check.Handler;
-import me.david.webapi.handler.anotation.check.Mapping;
-import me.david.webapi.request.Request;
-import me.david.webapi.response.content.ResponseContent;
-import me.david.webapi.response.content.file.CachedStaticFileContent;
+import io.github.splotycode.mosaik.webapi.handler.anotation.check.Handler;
+import io.github.splotycode.mosaik.webapi.handler.anotation.check.Mapping;
+import io.github.splotycode.mosaik.webapi.request.Request;
+import io.github.splotycode.mosaik.webapi.response.content.ResponseContent;
+import io.github.splotycode.mosaik.webapi.response.content.file.CachedStaticFileContent;
 
 @Handler
 public class Static {
