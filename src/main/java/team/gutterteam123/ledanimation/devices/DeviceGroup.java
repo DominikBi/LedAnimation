@@ -6,6 +6,11 @@ import java.util.Collection;
 public class DeviceGroup implements Controllable {
 
     private Collection<Device> devices = new ArrayList<>();
+    private String name;
+
+    public DeviceGroup(String name) {
+        this.name = name;
+    }
 
     @Override
     public void setChannel(ChannelType channel, short value) {
@@ -19,6 +24,6 @@ public class DeviceGroup implements Controllable {
 
     @Override
     public String displayName() {
-        return null;
+        return name;
     }
 }
