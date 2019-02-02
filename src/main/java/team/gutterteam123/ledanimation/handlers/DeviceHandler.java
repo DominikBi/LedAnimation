@@ -7,7 +7,6 @@ import team.gutterteam123.ledanimation.devices.Controllable;
 import team.gutterteam123.ledanimation.devices.Device;
 import team.gutterteam123.ledanimation.devices.DeviceGroup;
 
-@Mapping(value = "devices/**")
 public class DeviceHandler  {
 
     @Mapping(value = "devices/create")
@@ -21,6 +20,13 @@ public class DeviceHandler  {
         Controllable.FILE_SYSTEM.deleteEntry(name);
         response.redirect("/device", false);
     }
+    @Mapping(value = "devices/visible")
+    public void setVisible(@RequiredGet(value = "name") String name, Response response){
+        Controllable controllable = Controllable.FILE_SYSTEM.getEntry(name);
+        controllable.setVisible(!controllable.isVisible());
+        response.redirect("/device", false);
+    }
+
 
 }
 

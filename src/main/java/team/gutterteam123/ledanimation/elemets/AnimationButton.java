@@ -9,6 +9,7 @@ public class AnimationButton implements ControllableAnimation {
         Animation animation = new Animation();
         animation.name = name;
         animation.id = AnimationId;
+
     }
 
     @Override

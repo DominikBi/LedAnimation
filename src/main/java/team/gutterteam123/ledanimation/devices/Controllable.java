@@ -13,7 +13,7 @@ import java.io.Serializable;
 @DomEntry("controllable")
 public interface Controllable extends Serializable {
 
-    FileSystem<Controllable> FILE_SYSTEM = LinkBase.getInstance().getLink(Links.PARSING_FILEPROVIDER).provide("controlables", new SerialisedEntryParser());
+    FileSystem<Controllable> FILE_SYSTEM = LinkBase.getInstance().getLink(Links.PARSING_FILEPROVIDER).provide("controllables", new SerialisedEntryParser());
 
     void setChannel(ChannelType channel, short value);
 
@@ -26,5 +26,9 @@ public interface Controllable extends Serializable {
     default String typeName() {
         return getClass().getSimpleName();
     }
+
+    boolean isVisible();
+
+    void setVisible(boolean visible);
 
 }
