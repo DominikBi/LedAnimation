@@ -14,6 +14,10 @@ public class Device implements Controllable {
     @Getter @Setter
     private boolean visible;
 
+    public Map<ChannelType, Integer> getChannelMap() {
+        return channels;
+    }
+
     public Device(String name) {
         this.name = name;
     }

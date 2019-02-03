@@ -15,8 +15,13 @@ public class Views {
     @Mapping("/device")
     public ResponseContent device() {
         FileResponseContent content = new FileResponseContent(new File("web/devices.html"));
-        content.manipulate().pattern("devices", Controllable.FILE_SYSTEM.getEntries());
+        content.manipulate().patternListName("devices", Controllable.FILE_SYSTEM.getEntries());
         return content;
+    }
+
+    @Mapping("/login")
+    public ResponseContent login() {
+        return new FileResponseContent(new File("web/static/login.html"));
     }
 
     @Mapping("/")

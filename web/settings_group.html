@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+<form method="get" action="devices/update">
+    <select name="devices" multiple>
+        $@devices$
+        <option $selected$>$name$</option>
+        $@@$
+    </select>
+    <input type="hidden" name="name" value="$name$">
+    <button type="submit">Update</button>
+</form>
+</body>
+</html>
