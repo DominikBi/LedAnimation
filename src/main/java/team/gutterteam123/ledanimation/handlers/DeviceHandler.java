@@ -3,6 +3,7 @@ package team.gutterteam123.ledanimation.handlers;
 import io.github.splotycode.mosaik.util.Pair;
 import io.github.splotycode.mosaik.webapi.handler.anotation.check.Mapping;
 import io.github.splotycode.mosaik.webapi.handler.anotation.handle.RequiredGet;
+import io.github.splotycode.mosaik.webapi.request.Request;
 import io.github.splotycode.mosaik.webapi.response.Response;
 import io.github.splotycode.mosaik.webapi.response.content.ResponseContent;
 import io.github.splotycode.mosaik.webapi.response.content.file.FileResponseContent;
@@ -13,6 +14,7 @@ import team.gutterteam123.ledanimation.devices.Device;
 import team.gutterteam123.ledanimation.devices.DeviceGroup;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -34,7 +36,7 @@ public class DeviceHandler  {
     public void setVisible(@RequiredGet(value = "name") String name, Response response){
         Controllable controllable = Controllable.FILE_SYSTEM.getEntry(name);
         controllable.setVisible(!controllable.isVisible());
-        System.out.println("set visible of " + name + " " + controllable.displayName() + " " + controllable.isVisible());
+        System.out.println("Set visible of " + name + " " + controllable.displayName() + " " + controllable.isVisible());
         Controllable.FILE_SYSTEM.putEntry(name, controllable);
         response.redirect("/device", false);
     }
@@ -98,9 +100,14 @@ public class DeviceHandler  {
     }
 
     @Mapping("devices/update")
-    public void update(@RequiredGet("devices") String devices, @RequiredGet("name") String name, Response response) {
-        DeviceGroup group = (DeviceGroup) Controllable.FILE_SYSTEM.getEntry(name);
+    public void update(@RequiredGet("name") String name, Response response, Request request) {
+        Collection<String> col = request.getGetParameter("devices");
+        DeviceGroup group = (DeviceGroup) Controllable.FILE_SYSTEM.getEntries();
         group.getDevices().clear();
+        for(String curCol : col){
+        group.registerDevice((Device) Device.FILE_SYSTEM.getEntry(curCol));
+        }
+        new DeviceGroup();
         response.redirect("/device", false);
     }
 
