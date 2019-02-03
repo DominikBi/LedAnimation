@@ -40,14 +40,14 @@ public class Views {
         content.manipulate().pattern("animation", Controllable.FILE_SYSTEM.getEntries());
         return content;
     }
+
     @Mapping("/live")
     public ResponseContent controlLive(){
         FileResponseContent content = new FileResponseContent(new File("web/controlLive.html"));
         content.manipulate().pattern("devices", Controllable.FILE_SYSTEM.getEntries());
         return content;
-
-
     }
+
     @Mapping("/liveStart")
     public ResponseContent liveStart(){
         FileResponseContent content = new FileResponseContent(new File("web/Live.html"));
