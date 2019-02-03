@@ -8,7 +8,7 @@ import java.util.Collection;
 
 public class DeviceGroup implements Controllable {
 
-    private Collection<Device> devices = new ArrayList<>();
+    @Getter private Collection<Device> devices = new ArrayList<>();
     private String name;
     @Getter
     @Setter

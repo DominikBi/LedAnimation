@@ -1,11 +1,20 @@
 package team.gutterteam123.ledanimation.handlers;
 
+import io.github.splotycode.mosaik.util.Pair;
 import io.github.splotycode.mosaik.webapi.handler.anotation.check.Mapping;
 import io.github.splotycode.mosaik.webapi.handler.anotation.handle.RequiredGet;
 import io.github.splotycode.mosaik.webapi.response.Response;
+import io.github.splotycode.mosaik.webapi.response.content.ResponseContent;
+import io.github.splotycode.mosaik.webapi.response.content.file.FileResponseContent;
+import lombok.AllArgsConstructor;
+import team.gutterteam123.ledanimation.devices.ChannelType;
 import team.gutterteam123.ledanimation.devices.Controllable;
 import team.gutterteam123.ledanimation.devices.Device;
 import team.gutterteam123.ledanimation.devices.DeviceGroup;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 public class DeviceHandler  {
 
@@ -20,10 +29,13 @@ public class DeviceHandler  {
         Controllable.FILE_SYSTEM.deleteEntry(name);
         response.redirect("/device", false);
     }
+
     @Mapping(value = "devices/visible")
     public void setVisible(@RequiredGet(value = "name") String name, Response response){
         Controllable controllable = Controllable.FILE_SYSTEM.getEntry(name);
         controllable.setVisible(!controllable.isVisible());
+        System.out.println("set visible of " + name + " " + controllable.displayName() + " " + controllable.isVisible());
+        Controllable.FILE_SYSTEM.putEntry(name, controllable);
         response.redirect("/device", false);
     }
 

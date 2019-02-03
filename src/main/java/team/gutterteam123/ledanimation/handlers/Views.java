@@ -1,5 +1,6 @@
 package team.gutterteam123.ledanimation.handlers;
 
+import io.github.splotycode.mosaik.util.Pair;
 import io.github.splotycode.mosaik.webapi.handler.anotation.check.Handler;
 import io.github.splotycode.mosaik.webapi.handler.anotation.check.Mapping;
 import io.github.splotycode.mosaik.webapi.response.Response;
@@ -8,6 +9,7 @@ import io.github.splotycode.mosaik.webapi.response.content.file.FileResponseCont
 import team.gutterteam123.ledanimation.devices.Controllable;
 
 import java.io.File;
+import java.util.stream.Collectors;
 
 @Handler
 public class Views {
@@ -15,7 +17,10 @@ public class Views {
     @Mapping("/device")
     public ResponseContent device() {
         FileResponseContent content = new FileResponseContent(new File("web/devices.html"));
-        content.manipulate().patternListName("devices", Controllable.FILE_SYSTEM.getEntries());
+        for (Controllable controllable : Controllable.FILE_SYSTEM.getEntries()) {
+            System.out.println(controllable.displayName() + " " + controllable.isVisible());
+            content.manipulate().patternCostomWithObj("devices", controllable, new Pair<>("visible-status", controllable.isVisible() ? "primary" : "secondary"));
+        }
         return content;
     }
 

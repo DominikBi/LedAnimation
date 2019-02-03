@@ -11,7 +11,7 @@ import io.github.splotycode.mosaik.webapi.response.content.manipulate.HandleAsFi
 import java.io.Serializable;
 
 @DomEntry("controllable")
-public interface Controllable extends Serializable {
+public interface Controllable extends Serializable, Comparable<Controllable> {
 
     FileSystem<Controllable> FILE_SYSTEM = LinkBase.getInstance().getLink(Links.PARSING_FILEPROVIDER).provide("controllables", new SerialisedEntryParser());
 
@@ -31,4 +31,12 @@ public interface Controllable extends Serializable {
 
     void setVisible(boolean visible);
 
+    @Override
+    default int compareTo(Controllable controllable) {
+        int type = typeName().compareTo(controllable.typeName());
+        if (type == 0) {
+            type = displayName().compareTo(controllable.displayName());
+        }
+        return type;
+    }
 }
