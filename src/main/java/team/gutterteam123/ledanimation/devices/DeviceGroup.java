@@ -8,10 +8,11 @@ import java.util.Collection;
 
 public class DeviceGroup implements Controllable {
 
-    @Getter private transient Collection<Device> devices = new ArrayList<>();
+    @Getter private transient Collection<Device> devices;
     private Collection<String> rawDevices = new ArrayList<>();
 
     public DeviceGroup() {
+        devices = new ArrayList<>();
         for (String device : rawDevices) {
             devices.add((Device) Controllable.FILE_SYSTEM.getEntry(device));
         }

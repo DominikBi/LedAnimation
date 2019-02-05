@@ -39,32 +39,24 @@ public class DeviceHandler  {
         response.redirect("/device", false);
     }
 
-
-    @AllArgsConstructor
-    public static class SelectableDevice {
-        private String name;
-        private String selected;
-    }
-
     @Mapping(value = "devices/settings")
-    public ResponseContent settings(@RequiredGet(value = "name") String name){
-        Controllable controllable = Controllable.FILE_SYSTEM.getEntry(name);
+    public ResponseContent settings(@RequiredGet(value = "name") Controllable controllable){
+        String name = controllable.displayName();
         if (controllable instanceof DeviceGroup) {
             DeviceGroup group = (DeviceGroup) controllable;
 
-            List<SelectableDevice> selectables = new ArrayList<>();
-
             FileResponseContent content = new FileResponseContent("web/settings_group.html");
-            for (Device device : group.getDevices()) {
-                selectables.add(new SelectableDevice(device.displayName(), "selected"));
-            }
-            for (Controllable controllables : Controllable.FILE_SYSTEM.getEntries()) {
-                if (controllables instanceof Device && !group.getDevices().contains(controllables)) {
-                    selectables.add(new SelectableDevice(controllables.displayName(), ""));
+
+            List<Device> selectable = new ArrayList<>();
+            for (Controllable cont : Controllable.FILE_SYSTEM.getEntries()) {
+                System.out.println(cont + " " + group);
+                if (cont instanceof Device &&
+                        !group.getDevices().contains(cont)) {
+                    selectable.add((Device) cont);
                 }
             }
-            content.manipulate().patternListName("devices", selectables);
-            content.manipulate().variable("name", name);
+            content.manipulate().patternListName("devices", selectable);
+            content.manipulate().variable("device", name);
             return content;
         } else {
             Device device = (Device) controllable;

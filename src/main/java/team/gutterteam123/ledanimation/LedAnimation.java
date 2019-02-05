@@ -3,6 +3,8 @@ package team.gutterteam123.ledanimation;
 import io.github.splotycode.mosaik.runtime.LinkBase;
 import io.github.splotycode.mosaik.runtime.application.Application;
 import io.github.splotycode.mosaik.runtime.startup.BootContext;
+import io.github.splotycode.mosaik.valuetransformer.TransformerManager;
+import io.github.splotycode.mosaik.valuetransformer.ValueTransformer;
 import io.github.splotycode.mosaik.webapi.WebApplicationType;
 import io.github.splotycode.mosaik.webapi.server.netty.NettyWebServer;
 import lombok.Getter;
@@ -30,6 +32,7 @@ public class LedAnimation extends Application implements WebApplicationType {
 
     @Override
     public void start(BootContext bootContext) throws Exception {
+        LinkBase.getInstance().getLink(TransformerManager.LINK).registerPackage("team.gutterteam123.ledanimation.transformer");
         //olaClient = new OlaClient();
         setWebServer(new NettyWebServer(this));
         listen(5555);
