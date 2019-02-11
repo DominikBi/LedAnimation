@@ -27,7 +27,19 @@ public class DeviceHandler  {
 
     @Mapping(value = "devices/delete")
     public void delete(@RequiredGet(value = "name") String name, Response response){
+        /* Remove device in groups */
+        for (Controllable controllable : Controllable.FILE_SYSTEM.getEntries()) {
+            if (controllable instanceof DeviceGroup) {
+                DeviceGroup group = (DeviceGroup) controllable;
+                if (group.getRawDevices().contains(name)) {
+                    group.unregisterDevice((Device) Controllable.FILE_SYSTEM.getEntry(name));
+                    Controllable.FILE_SYSTEM.putEntry(group.displayName(), group);
+                }
+            }
+        }
+
         Controllable.FILE_SYSTEM.deleteEntry(name);
+
         response.redirect("/device", false);
     }
 
@@ -55,7 +67,7 @@ public class DeviceHandler  {
             List<Device> selectable = new ArrayList<>();
             for (Controllable cont : Controllable.FILE_SYSTEM.getEntries()) {
                 System.out.println(cont + " " + group + " " + group.getDevices());
-                if (cont instanceof Device && !group.getDevices().contains(cont)) {
+                if (cont instanceof Device && !group.getRawDevices().contains(cont.displayName())) {
                     selectable.add((Device) cont);
                 }
             }
