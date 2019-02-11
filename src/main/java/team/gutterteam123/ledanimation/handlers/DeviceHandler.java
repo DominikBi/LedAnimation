@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+@SuppressWarnings("unused")
 public class DeviceHandler  {
 
     @Mapping(value = "devices/create")
@@ -47,11 +48,14 @@ public class DeviceHandler  {
 
             FileResponseContent content = new FileResponseContent("web/settings_group.html");
 
+            for (Device child : group.getDevices()) {
+                content.manipulate().patternCostomWithObj("linked", child, new Pair<>("device", group.displayName()));
+            }
+
             List<Device> selectable = new ArrayList<>();
             for (Controllable cont : Controllable.FILE_SYSTEM.getEntries()) {
-                System.out.println(cont + " " + group);
-                if (cont instanceof Device &&
-                        !group.getDevices().contains(cont)) {
+                System.out.println(cont + " " + group + " " + group.getDevices());
+                if (cont instanceof Device && !group.getDevices().contains(cont)) {
                     selectable.add((Device) cont);
                 }
             }
@@ -94,6 +98,22 @@ public class DeviceHandler  {
         DeviceGroup group = (DeviceGroup) Controllable.FILE_SYSTEM.getEntry(name);
         group.getDevices().clear();
         response.redirect("/device", false);
+    }
+
+    @Mapping("devices/addToGroup")
+    public void addToGroup(@RequiredGet("device") String deviceName, @RequiredGet("add") Controllable add, Response response) {
+        DeviceGroup device = (DeviceGroup) Controllable.FILE_SYSTEM.getEntry(deviceName);
+        device.registerDevice((Device) add);
+        Controllable.FILE_SYSTEM.putEntry(deviceName, device);
+        response.redirect("/devices/settings/?name=" + deviceName, false);
+    }
+
+    @Mapping("devices/removeFromGroup")
+    public void removeFromGroup(@RequiredGet("device") String deviceName, @RequiredGet("remove") Controllable remove, Response response) {
+        DeviceGroup device = (DeviceGroup) Controllable.FILE_SYSTEM.getEntry(deviceName);
+        device.unregisterDevice((Device) remove);
+        Controllable.FILE_SYSTEM.putEntry(deviceName, device);
+        response.redirect("/devices/settings/?name=" + deviceName, false);
     }
 
 }

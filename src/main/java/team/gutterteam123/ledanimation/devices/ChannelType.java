@@ -5,7 +5,7 @@ import io.github.splotycode.mosaik.webapi.response.content.manipulate.HandleAsFi
 
 public enum ChannelType {
 
-    COLOR_RED, COLOR_BLUE, COLOR_GREEN, BRIGHTNESS;
+    COLOR_RED, COLOR_BLUE, COLOR_GREEN, BRIGHTNESS, PAN, TILT, STROBE, GLOBO, GLOBO_SPEED;
 
     @HandleAsField(name = "dname")
     public String displayName() {

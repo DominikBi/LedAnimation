@@ -13,7 +13,7 @@ import ola.OlaClient;
 @Getter
 public class LedAnimation extends Application implements WebApplicationType {
 
-    private short[] dmxChannels = new short[512];
+    private short[] dmxChannels = new short[511];
     private OlaClient olaClient;
 
     public static LedAnimation getInstance() {
@@ -25,15 +25,16 @@ public class LedAnimation extends Application implements WebApplicationType {
     }
 
     public void setChannel(int channel, short value) {
+        channel--;
         setChannelSilent(channel, value);
-        getLogger().debug("setting channel " + channel + " to " + value);
-        //(olaClient.sendDmx(1, dmxChannels);
+        getLogger().info("setting channel " + channel + " to " + value);
+        olaClient.sendDmx(1, dmxChannels);
     }
 
     @Override
     public void start(BootContext bootContext) throws Exception {
         LinkBase.getInstance().getLink(TransformerManager.LINK).registerPackage("team.gutterteam123.ledanimation.transformer");
-        //olaClient = new OlaClient();
+        olaClient = new OlaClient();
         setWebServer(new NettyWebServer(this));
         listen(5555);
     }

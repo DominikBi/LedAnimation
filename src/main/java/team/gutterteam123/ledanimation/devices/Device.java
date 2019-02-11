@@ -4,10 +4,13 @@ import lombok.Getter;
 import lombok.Setter;
 import team.gutterteam123.ledanimation.LedAnimation;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
 public class Device implements Controllable {
+
+    private static final long serialVersionUID = 1L;
 
     private Map<ChannelType, Integer> channels = new HashMap<>();
     private String name;
@@ -28,8 +31,8 @@ public class Device implements Controllable {
     }
 
     @Override
-    public ChannelType getChannels() {
-        return null;
+    public Collection<ChannelType> getChannels() {
+        return channels.keySet();
     }
 
     @Override
