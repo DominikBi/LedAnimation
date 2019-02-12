@@ -10,10 +10,14 @@ import io.github.splotycode.mosaik.webapi.server.netty.NettyWebServer;
 import lombok.Getter;
 import ola.OlaClient;
 
+import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 @Getter
 public class LedAnimation extends Application implements WebApplicationType {
 
-    private short[] dmxChannels = new short[511];
+    private final short[] dmxChannels = new short[511];
     private OlaClient olaClient;
 
     public static LedAnimation getInstance() {
@@ -21,13 +25,15 @@ public class LedAnimation extends Application implements WebApplicationType {
     }
 
     public void setChannelSilent(int channel, short value) {
-        dmxChannels[channel] = value;
+        synchronized (dmxChannels) {
+            dmxChannels[channel] = value;
+        }
     }
 
-    public void setChannel(int channel, short value) {
-        channel--;
-        setChannelSilent(channel, value);
-        getLogger().info("setting channel " + channel + " to " + value);
+    public void setChannel(int channel, final short value) {
+        final int readlchannel = channel - 1;
+        setChannelSilent(readlchannel, value);
+        getLogger().info("setting channel " + readlchannel + " to " + value);
         olaClient.sendDmx(1, dmxChannels);
     }
 

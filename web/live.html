@@ -9,13 +9,6 @@
     <link rel="stylesheet" href="static/3party/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="static/3party/datatable.css">
     <link rel="stylesheet" href="static/3party/datatable_bootstrap.css">
-    <style>
-        html, body {
-            height: 100%;
-            margin: 0;
-            padding: 0;
-        }
-    </style>
 </head>
 <body style="">
     <nav class="navbar navbar-expand-md navbar-dark bg-dark stickyheight: 100%-top">
@@ -49,8 +42,12 @@
                 <h3>$name$</h3>
                 <div>
                 $@control$
-                <input type="range" class="form-control-range" max="255" value="$value$">
-                <span class="text-$save$">$channel$</span>
+                <form method="get" action="/liveaction/setvalue" class="valueform">
+                    <input type="range" class="form-control-range valuerange" max="255" value="$value$" name="value">
+                    <input value="$channel$" name="channel" type="hidden">
+                    <input value="$device$" name="device" type="hidden">
+                    <span class="text-$save$">$channel$</span>
+                </form>
                 $@@$
                 </div>
             </div>
@@ -59,8 +56,20 @@
     </main>
 
 
-<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+<script src="static/3party/jquery.js"></script>
+<script src="static/3party/bootstrap/js/bootstrap.min.js"></script>
+<script src="static/3party/datatables.js"></script>
+<script src="static/3party/datatable_bootstrap.js"></script>
+<script>
+$('.valuerange').each(function(){
+    $(this).on('input', function() {
+        $.ajax({
+            url : this.form.action,
+            type: this.form.method,
+            data: $(this.form).serialize()
+        });
+    });
+});
+</script>
 </body>
 </html>

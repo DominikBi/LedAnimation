@@ -11,7 +11,6 @@ import team.gutterteam123.ledanimation.LedAnimation;
 import team.gutterteam123.ledanimation.devices.*;
 
 import java.io.File;
-import java.util.stream.Collectors;
 
 @Handler
 public class Views {
@@ -20,7 +19,6 @@ public class Views {
     public ResponseContent device() {
         FileResponseContent content = new FileResponseContent(new File("web/devices.html"));
         for (Controllable controllable : Controllable.FILE_SYSTEM.getEntries()) {
-            System.out.println(controllable.displayName() + " " + controllable.isVisible());
             content.manipulate().patternCostomWithObj("devices", controllable, new Pair<>("visible-status", controllable.isVisible() ? "primary" : "secondary"));
         }
         return content;
@@ -51,16 +49,11 @@ public class Views {
                 ChannelValue value = device.getOne().getValue(channel.getOne());
                 channel.getTwo().addCostom(new Pair<>("channel", channel.getOne().displayName()),
                                            new Pair<>("value", value.getValue()),
-                                           new Pair<>("save", value.isSave() ? "info" : "warning"));
+                                           new Pair<>("save", value.isSave() ? "info" : "warning"),
+                                           new Pair<>("device", device.getOne().displayName()));
             }, device.getOne().getChannels());
         }, Controllable.FILE_SYSTEM.getEntries()));
         return content;
     }
 
-    @Mapping("/liveStart")
-    public ResponseContent liveStart(){
-        FileResponseContent content = new FileResponseContent(new File("web/Live.html"));
-        content.manipulate().pattern("live", Controllable.FILE_SYSTEM.getEntries());
-        return content;
-    }
 }
