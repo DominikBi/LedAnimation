@@ -6,7 +6,9 @@ import io.github.splotycode.mosaik.webapi.handler.anotation.check.Mapping;
 import io.github.splotycode.mosaik.webapi.response.Response;
 import io.github.splotycode.mosaik.webapi.response.content.ResponseContent;
 import io.github.splotycode.mosaik.webapi.response.content.file.FileResponseContent;
-import team.gutterteam123.ledanimation.devices.Controllable;
+import io.github.splotycode.mosaik.webapi.response.content.manipulate.pattern.PatternCommand;
+import team.gutterteam123.ledanimation.LedAnimation;
+import team.gutterteam123.ledanimation.devices.*;
 
 import java.io.File;
 import java.util.stream.Collectors;
@@ -42,9 +44,16 @@ public class Views {
     }
 
     @Mapping("/live")
-    public ResponseContent controlLive(){
-        FileResponseContent content = new FileResponseContent(new File("web/controlLive.html"));
-        content.manipulate().pattern("devices", Controllable.FILE_SYSTEM.getEntries());
+    public ResponseContent live(){
+        FileResponseContent content = new FileResponseContent(new File("web/live.html"));
+        content.manipulate().pattern(PatternCommand.create("devices").createSecondaries(device -> {
+            device.getTwo().createChild("control").createSecondaries(channel -> {
+                ChannelValue value = device.getOne().getValue(channel.getOne());
+                channel.getTwo().addCostom(new Pair<>("channel", channel.getOne().displayName()),
+                                           new Pair<>("value", value.getValue()),
+                                           new Pair<>("save", value.isSave() ? "info" : "warning"));
+            }, device.getOne().getChannels());
+        }, Controllable.FILE_SYSTEM.getEntries()));
         return content;
     }
 

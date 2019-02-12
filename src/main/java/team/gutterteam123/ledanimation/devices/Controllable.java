@@ -35,6 +35,8 @@ public interface Controllable extends Serializable, Comparable<Controllable> {
 
     void setVisible(boolean visible);
 
+    ChannelValue getValue(ChannelType type);
+
     @Override
     default int compareTo(Controllable controllable) {
         int type = typeName().compareTo(controllable.typeName());

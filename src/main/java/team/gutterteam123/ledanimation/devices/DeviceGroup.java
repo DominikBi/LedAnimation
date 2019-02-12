@@ -3,6 +3,7 @@ package team.gutterteam123.ledanimation.devices;
 import io.github.splotycode.mosaik.domparsing.annotation.EntryListener;
 import lombok.Getter;
 import lombok.Setter;
+import team.gutterteam123.ledanimation.LedAnimation;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -59,6 +60,31 @@ public class DeviceGroup implements Controllable, EntryListener {
     @Override
     public String displayName() {
         return name;
+    }
+
+    @Override
+    public ChannelValue getValue(ChannelType type) {
+        short current = -1;
+        boolean save = true;
+
+        for (Device child : devices) {
+            short val = child.getValue(type).getValue();
+            if (current == -1) {
+                current = val;
+            } else if (val != current) {
+                save = false;
+                break;
+            }
+        }
+
+        if (!save) {
+            int sum = 0;
+            for (Device child : devices) {
+                sum += child.getValue(type).getValue();
+            }
+            current = (short) (sum / devices.size());
+        }
+        return new ChannelValue(save, current);
     }
 
     @Override public void preSerialisation() {}

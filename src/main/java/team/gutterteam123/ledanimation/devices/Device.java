@@ -40,5 +40,10 @@ public class Device implements Controllable {
         return name;
     }
 
+    @Override
+    public ChannelValue getValue(ChannelType type) {
+        return new ChannelValue(true, LedAnimation.getInstance().getDmxChannels()[channels.get(type)]);
+    }
+
 
 }
