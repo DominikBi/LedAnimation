@@ -10,6 +10,7 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="Maven: io.github.splotycode.mosaik:Mosaik-All:2.2.7.2" level="project" />
     <orderEntry type="module-library">
       <library name="Maven: ola:ola-java-client:1.9.9">
         <CLASSES>
