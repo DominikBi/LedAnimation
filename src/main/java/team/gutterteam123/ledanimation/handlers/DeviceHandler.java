@@ -12,7 +12,9 @@ import team.gutterteam123.ledanimation.devices.Controllable;
 import team.gutterteam123.ledanimation.devices.Device;
 import team.gutterteam123.ledanimation.devices.DeviceGroup;
 
+import java.text.CollationElementIterator;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -106,7 +108,7 @@ public class DeviceHandler  {
     }
 
     @Mapping("devices/update")
-    public void update(@RequiredGet("devices") String devices, @RequiredGet("name") String name, Response response) {
+    public void update(@RequiredGet("channel") String name, Response response) {
         DeviceGroup group = (DeviceGroup) Controllable.FILE_SYSTEM.getEntry(name);
         group.getDevices().clear();
         response.redirect("/device", false);
