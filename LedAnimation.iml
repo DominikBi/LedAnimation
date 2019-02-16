@@ -19,7 +19,7 @@
         <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="library" name="Maven: io.github.splotycode.mosaik:Mosaik-All:2.2.7.2" level="project" />
+    <orderEntry type="library" name="Maven: io.github.splotycode.mosaik:Mosaik-All:2.2.8-Dev" level="project" />
     <orderEntry type="library" name="Maven: com.google.guava:guava:21.0" level="project" />
     <orderEntry type="library" name="Maven: net.jodah:typetools:0.6.0" level="project" />
     <orderEntry type="library" name="Maven: io.netty:netty-all:4.1.24.Final" level="project" />

@@ -5,10 +5,11 @@
     <title>Control Live</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" href="static/style.css">
-    <link rel="stylesheet" href="static/3party/fa/css/all.css">
-    <link rel="stylesheet" href="static/3party/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="static/3party/datatable.css">
-    <link rel="stylesheet" href="static/3party/datatable_bootstrap.css">
+    <link rel="stylesheet" href="/static/3party/fa/css/all.css">
+    <link rel="stylesheet" href="/static/3party/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/3party/datatable.css">
+    <link rel="stylesheet" href="/static/3party/datatable_bootstrap.css">
+    <link rel="stylesheet" href="/static/3party/spectrum.css">
 </head>
 <body style="">
     <nav class="navbar navbar-expand-md navbar-dark bg-dark stickyheight: 100%-top">
@@ -28,6 +29,9 @@
                 <li class="nav-item">
                     <a class="nav-link" href="/animation">Animation</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/scene">Scenes</a>
+                </li>
             </ul>
         </div>
     </nav>
@@ -35,19 +39,39 @@
         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
             <h1 class="h1" style="padding-top:12px">Live</h1>
         </div>
-
+        <div class="btn-toolbar mb-3" role="toolbar" aria-label="Toolbar with button groups">
+            <div class="btn-group mr-2" role="group" aria-label="First group">
+                <button type="button" class="btn btn-secondary">1</button>
+                <button type="button" class="btn btn-secondary">2</button>
+                <button type="button" class="btn btn-secondary">3</button>
+                <button type="button" class="btn btn-secondary">4</button>
+            </div>
+            <form method="get" action="/liveaction/setmaster">
+                <div class="input-group">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text" id="btnGroupAddon">Master</div>
+                        </div>
+                        <input id="master" name="value" type="range" value="$master$" class="form-control" placeholder="Master value" aria-label="Input group example" aria-describedby="btnGroupAddon">
+                </div>
+            </form>
+        </div>
         <div class="d-flex" style="height: 100%">
         $@devices$
             <div class="border border-primary rounded align-items-center" style="min-width: 5vw !important;padding:0 15px;flex-shrink: 0;flex-grow: 1;">
                 <h3>$name$</h3>
+                $@color$
+                <div>
+                    <input type='text' class="color-select" value="rgb $red$ $green$ $blue$" data-device="$device$">
+                </div>
+                $@@$
                 <div>
                 $@control$
-                <form method="get" action="/liveaction/setvalue" class="valueform">
-                    <input type="range" class="form-control-range valuerange" max="255" value="$value$" name="value">
-                    <input value="$channel$" name="channel" type="hidden">
-                    <input value="$device$" name="device" type="hidden">
-                    <span class="text-$save$">$channel$</span>
-                </form>
+                    <form method="get" action="/liveaction/setvalue" class="valueform">
+                        <input type="range" class="form-control-range valuerange" max="255" value="$value$" name="value">
+                        <input value="$channel$" name="channel" type="hidden">
+                        <input value="$device$" name="device" type="hidden">
+                        <span class="text-$save$">$channel$</span>
+                    </form>
                 $@@$
                 </div>
             </div>
@@ -56,11 +80,19 @@
     </main>
 
 
-<script src="static/3party/jquery.js"></script>
-<script src="static/3party/bootstrap/js/bootstrap.min.js"></script>
-<script src="static/3party/datatables.js"></script>
-<script src="static/3party/datatable_bootstrap.js"></script>
+<script src="/static/3party/jquery.js"></script>
+<script src="/static/3party/bootstrap/js/bootstrap.min.js"></script>
+<script src="/static/3party/datatables.js"></script>
+<script src="/static/3party/datatable_bootstrap.js"></script>
+<script src="/static/3party/spectrum.js"></script>
 <script>
+$("#master").on('input', function() {
+    $.ajax({
+        url : this.form.action,
+        type: this.form.method,
+        data: $(this.form).serialize()
+    });
+});
 $('.valuerange').each(function(){
     $(this).on('input', function() {
         $.ajax({
@@ -70,6 +102,28 @@ $('.valuerange').each(function(){
         });
     });
 });
+$('.color-select').each(function(){
+    var device = $(this).attr("data-device");
+    $(this).spectrum({
+        flat: true,
+        showInput: true,
+        cancelText: "",
+        chooseText: "",
+        move: function(color) {
+            updateChannel(device, "COLOR RED", color.toRgb().r);
+            updateChannel(device, "COLOR GREEN", color.toRgb().g);
+            updateChannel(device, "COLOR BLUE", color.toRgb().b);
+        }
+    });
+});
+function updateChannel(device, channel, value) {
+    var get = "value=" + value + "&channel=" + channel + "&device=" + device;
+    $.ajax({
+        url : "/liveaction/setvalue",
+        type: "get",
+        data: get
+    });
+}
 </script>
 </body>
 </html>

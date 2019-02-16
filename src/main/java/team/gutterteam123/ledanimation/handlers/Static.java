@@ -6,10 +6,9 @@ import io.github.splotycode.mosaik.webapi.request.Request;
 import io.github.splotycode.mosaik.webapi.response.content.ResponseContent;
 import io.github.splotycode.mosaik.webapi.response.content.file.CachedStaticFileContent;
 
-@Handler
 public class Static {
 
-    @Mapping("static/**")
+    /*@Mapping("static/**")*/
     public ResponseContent staticSite(Request request) {
         String path = request.getPath().substring(1);
         return new CachedStaticFileContent("web/static" + path.substring(path.indexOf('/')));

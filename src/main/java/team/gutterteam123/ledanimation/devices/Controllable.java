@@ -23,6 +23,12 @@ public interface Controllable extends Serializable, Comparable<Controllable> {
         return getChannels().contains(operation);
     }
 
+    default boolean supportsRGB() {
+        return supportsOperation(ChannelType.COLOR_RED) &&
+               supportsOperation(ChannelType.COLOR_GREEN) &&
+               supportsOperation(ChannelType.COLOR_BLUE);
+    }
+
     @HandleAsField(name = "name")
     String displayName();
 

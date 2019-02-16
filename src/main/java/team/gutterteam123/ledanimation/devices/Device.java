@@ -27,7 +27,7 @@ public class Device implements Controllable {
 
     @Override
     public void setChannel(ChannelType channel, short value) {
-        LedAnimation.getInstance().setChannel(channels.get(channel), value);
+        LedAnimation.getInstance().getLedHandler().setChannel(channels.get(channel), value, channel == ChannelType.BRIGHTNESS);
     }
 
     @Override
@@ -42,7 +42,7 @@ public class Device implements Controllable {
 
     @Override
     public ChannelValue getValue(ChannelType type) {
-        return new ChannelValue(true, LedAnimation.getInstance().getDmxChannels()[channels.get(type)]);
+        return new ChannelValue(true, LedHandler.getInstance().getRawValue(channels.get(type)));
     }
 
 

@@ -11,6 +11,7 @@ import team.gutterteam123.ledanimation.LedAnimation;
 import team.gutterteam123.ledanimation.devices.*;
 
 import java.io.File;
+import java.util.stream.Collectors;
 
 @Handler
 public class Views {
@@ -20,6 +21,15 @@ public class Views {
         FileResponseContent content = new FileResponseContent(new File("web/devices.html"));
         for (Controllable controllable : Controllable.FILE_SYSTEM.getEntries()) {
             content.manipulate().patternCostomWithObj("devices", controllable, new Pair<>("visible-status", controllable.isVisible() ? "primary" : "secondary"));
+        }
+        return content;
+    }
+
+    @Mapping("/scene")
+    public ResponseContent scene() {
+        FileResponseContent content = new FileResponseContent(new File("web/scene.html"));
+        for (Scene controllable : Scene.FILE_SYSTEM.getEntries()) {
+            content.manipulate().patternCostomWithObj("scenes", controllable);
         }
         return content;
     }
@@ -44,15 +54,25 @@ public class Views {
     @Mapping("/live")
     public ResponseContent live(){
         FileResponseContent content = new FileResponseContent(new File("web/live.html"));
+        content.manipulate().variable("master", LedAnimation.getInstance().getLedHandler().getMaster());
         content.manipulate().pattern(PatternCommand.create("devices").createSecondaries(device -> {
+            PatternCommand colorCommand = device.getTwo().createChild("color");
+            if (device.getOne().supportsRGB()) {
+                colorCommand.addCostom(
+                        new Pair<>("red", device.getOne().getValue(ChannelType.COLOR_RED)),
+                        new Pair<>("green", device.getOne().getValue(ChannelType.COLOR_GREEN)),
+                        new Pair<>("blue", device.getOne().getValue(ChannelType.COLOR_BLUE)),
+                        new Pair<>("device", device.getOne().displayName())
+                );
+            }
             device.getTwo().createChild("control").createSecondaries(channel -> {
                 ChannelValue value = device.getOne().getValue(channel.getOne());
                 channel.getTwo().addCostom(new Pair<>("channel", channel.getOne().displayName()),
                                            new Pair<>("value", value.getValue()),
                                            new Pair<>("save", value.isSave() ? "info" : "warning"),
                                            new Pair<>("device", device.getOne().displayName()));
-            }, device.getOne().getChannels());
-        }, Controllable.FILE_SYSTEM.getEntries()));
+            }, device.getOne().getChannels().stream().filter(type -> !type.isRgbChannel()).collect(Collectors.toList()));
+        }, Controllable.FILE_SYSTEM.getEntries().stream().filter(Controllable::isVisible).collect(Collectors.toList())));
         return content;
     }
 
