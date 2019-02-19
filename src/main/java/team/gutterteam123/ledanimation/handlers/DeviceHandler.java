@@ -12,6 +12,7 @@ import team.gutterteam123.ledanimation.devices.Controllable;
 import team.gutterteam123.ledanimation.devices.Device;
 import team.gutterteam123.ledanimation.devices.DeviceGroup;
 
+import java.io.File;
 import java.text.CollationElementIterator;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -20,6 +21,15 @@ import java.util.Map;
 
 @SuppressWarnings("unused")
 public class DeviceHandler  {
+
+    @Mapping(value = "views/device")
+    public ResponseContent view() {
+        FileResponseContent content = new FileResponseContent(new File("web/views/device.html"));
+        for (Controllable controllable : Controllable.FILE_SYSTEM.getEntries()) {
+            content.manipulate().patternCostomWithObj("devices", controllable, new Pair<>("visible-status", controllable.isVisible() ? "primary" : "secondary"));
+        }
+        return content;
+    }
 
     @Mapping(value = "devices/create")
     public void create(@RequiredGet(value = "name") String name, @RequiredGet(value = "type") int type, Response response){

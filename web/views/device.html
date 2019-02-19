@@ -1,0 +1,43 @@
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+    <h1 class="h1" style="padding-top:12px">Devices</h1>
+</div>
+<table id="devices" class="table table-dark table-striped table-hover dataTable">
+    <thead>
+    <tr>
+        <th scope="col">Type</th>
+        <th scope="col">Name</th>
+        <th scope="col">Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    $@devices$
+    <tr>
+        <th scope="row">$type$</th>
+        <td>$name$</td>
+        <td>
+            <a role="button" type="button" class="btn btn-danger" href="/devices/delete?name=$name$"><i class="fa fa-trash"></i></a>
+            <a role="button" type="button" href="/devices/visible?name=$name$" class="btn btn-$visible-status$"> <i class="fa fa-eye"></i></a>
+            <a role="button" type="button" class="btn btn-info" href="/devices/settings?name=$name$"> <i class="fa fa-cog"></i></a>
+        </td>
+    </tr>
+    $@@$
+    </tbody>
+</table>
+
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+    <h1 class="h2">Create new Device</h1>
+</div>
+<form method="get" action="/devices/create" class="form-inline justify-content-center">
+    <div class="form-group mb-2">
+        <label for="name" class="sr-only">Name</label>
+        <input class="form-control" name="name" placeholder="Device Name" id="name">
+    </div>
+    <div class="form-group mx-sm-3 mb-2">
+        <label for="type" class="sr-only">Type</label>
+        <select class="form-control" name="type" id="type">
+            <option value="1">Device</option>
+            <option value="2">Group</option>
+        </select>
+    </div>
+    <button type="submit" class="btn btn-success mb-2">Add</button>
+</form>

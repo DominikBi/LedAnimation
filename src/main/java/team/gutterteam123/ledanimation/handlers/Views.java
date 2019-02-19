@@ -1,5 +1,6 @@
 package team.gutterteam123.ledanimation.handlers;
 
+import io.github.splotycode.mosaik.annotations.Disabled;
 import io.github.splotycode.mosaik.util.Pair;
 import io.github.splotycode.mosaik.webapi.handler.anotation.check.Handler;
 import io.github.splotycode.mosaik.webapi.handler.anotation.check.Mapping;
@@ -13,10 +14,11 @@ import team.gutterteam123.ledanimation.devices.*;
 import java.io.File;
 import java.util.stream.Collectors;
 
-@Handler
+@Disabled
 public class Views {
 
-    @Mapping("/device")
+
+    //@Mapping("/device")
     public ResponseContent device() {
         FileResponseContent content = new FileResponseContent(new File("web/devices.html"));
         for (Controllable controllable : Controllable.FILE_SYSTEM.getEntries()) {
@@ -25,7 +27,7 @@ public class Views {
         return content;
     }
 
-    @Mapping("/scene")
+    //@Mapping("/scene")
     public ResponseContent scene() {
         FileResponseContent content = new FileResponseContent(new File("web/scene.html"));
         for (Scene controllable : Scene.FILE_SYSTEM.getEntries()) {
@@ -34,7 +36,7 @@ public class Views {
         return content;
     }
 
-    @Mapping("/login")
+    //@Mapping("/login")
     public ResponseContent login() {
         return new FileResponseContent(new File("web/static/login.html"));
     }
@@ -44,14 +46,14 @@ public class Views {
         response.redirect("/device", true);
     }
 
-    @Mapping("/animation")
+    //@Mapping("/animation")
     public ResponseContent AnimationOverview(){
         FileResponseContent content = new FileResponseContent(new File("web/AnimationOverview.html"));
         content.manipulate().pattern("animation", Controllable.FILE_SYSTEM.getEntries());
         return content;
     }
 
-    @Mapping("/live")
+    //@Mapping("/live")
     public ResponseContent live(){
         FileResponseContent content = new FileResponseContent(new File("web/live.html"));
         content.manipulate().variable("master", LedAnimation.getInstance().getLedHandler().getMaster());

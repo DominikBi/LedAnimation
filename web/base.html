@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>$site$ | LedAnimation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/static/3party/fa/css/all.css">
+    <link rel="stylesheet" href="/static/3party/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/3party/datatable.css">
+    <link rel="stylesheet" href="/static/3party/datatable_bootstrap.css">
+</head>
+<body class="text-center">
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark sticky-top">
+        <a class="navbar-brand" href="/">LedAnimation</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item $device$">
+                    <a class="nav-link" href="/device">Devices</a>
+                </li>
+                <li class="nav-item $live$">
+                    <a class="nav-link" href="/live">Live</a>
+                </li>
+                <li class="nav-item $animation$">
+                    <a class="nav-link" href="/animation">Animation</a>
+                </li>
+                <li class="nav-item $scene$">
+                    <a class="nav-link" href="/scene">Scenes</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <main id="main" role="main" class="container">
+        <p>Loading...</p>
+    </main>
+    <script src="/static/3party/jquery.js"></script>
+    <script src="/static/3party/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/static/3party/datatables.js"></script>
+    <script src="/static/3party/datatable_bootstrap.js"></script>
+    <script type="text/javascript">
+        var url = "$url$";
+        $(document).ready(function(){
+            $.get(url, function( data ) {
+                $("#main").html(data);
+            });
+        });
+    </script>
+</body>
+</html>

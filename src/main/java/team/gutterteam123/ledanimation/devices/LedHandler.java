@@ -29,10 +29,10 @@ public class LedHandler {
         channel--;
         dmxChannels[channel] = new DMXChannel(value, masterable);
         logger.info("setting channel " + channel + " to " + value);
-        Timer timer = new Timer();
-        timer.start();
+        //TODO stats? Timer timer = new Timer();
+        //timer.start();
         refresh();
-        logger.info("done in " + timer.getDelay());
+        //logger.info("done in " + timer.getDelay());
     }
 
     public void refresh() {
@@ -45,6 +45,7 @@ public class LedHandler {
     }
 
     public short getRawValue(int channel) {
+        channel--;
         DMXChannel dmx = dmxChannels[channel];
         return dmx == null ? 0 : dmx.getRawValue();
     }

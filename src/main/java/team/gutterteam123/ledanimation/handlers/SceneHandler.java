@@ -1,14 +1,27 @@
 package team.gutterteam123.ledanimation.handlers;
 
+import io.github.splotycode.mosaik.util.Pair;
 import io.github.splotycode.mosaik.webapi.handler.anotation.check.Mapping;
 import io.github.splotycode.mosaik.webapi.handler.anotation.handle.RequiredGet;
 import io.github.splotycode.mosaik.webapi.response.Response;
+import io.github.splotycode.mosaik.webapi.response.content.ResponseContent;
+import io.github.splotycode.mosaik.webapi.response.content.file.FileResponseContent;
 import team.gutterteam123.ledanimation.devices.*;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
 public class SceneHandler {
+
+    @Mapping(value = "views/scene")
+    public ResponseContent view() {
+        FileResponseContent content = new FileResponseContent(new File("web/views/scene.html"));
+        for (Scene controllable : Scene.FILE_SYSTEM.getEntries()) {
+            content.manipulate().patternCostomWithObj("scenes", controllable);
+        }
+        return content;
+    }
 
     @Mapping(value = "scenes/delete")
     public void delete(@RequiredGet(value = "name") String name, Response response){
