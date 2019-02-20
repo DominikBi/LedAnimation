@@ -3,34 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <title>Devices</title>
-    <link rel="stylesheet" type="text/css" href="style.css">
-    <link href="https://fonts.googleapis.com/css?family=Press+Start+2P" rel="stylesheet">
-    <script src="scriptRedSlider.js"></script>
+
+
+
 </head>
-<body class="body">
-<input id="userInputStart" width="60" height="40">
-<input id="userInputEnd" width="60" height="40">
-<canvas id="table" width="200" height="100" style="border:1px solid #000"></canvas>
-<button onclick="draw()">Submit</button>
+<section class="clearfix" id="timetable">
+    <ul>
+        <li id="timeStart" data-target="0">
+        <li id="timeEnd" data-target="100">
 
-<script>
-function draw(){
-    var canvas = document.getElementById("table");
-    var ctx = canvas.getContext("2d");
-    var userStart = document.getElementById("userInputStart").value;
-    var userEnd = document.getElementById("userInputEnd").value;
-    var rand = Math.floor(70*Math.random()) + 10;
-    ctx.moveTo(userStart, rand);
-    ctx.lineTo(userEnd, rand);
-    ctx.stroke();
-    }
-</script>
-<div class="range">Rot: <span>0</span>/256</div>
+        </li>
+    </ul>
+</section>
+<body>
 
-
-<input class="sliders" type="range" id="slider" value="0" min="0" max="256">
-<input class="sliders" type="range" id="sliderG" value="0" min="0" max="256">
-
+</body>
 
 </body>
 </html>
