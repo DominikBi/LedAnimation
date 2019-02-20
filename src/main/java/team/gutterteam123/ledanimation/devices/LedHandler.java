@@ -5,6 +5,9 @@ import io.github.splotycode.mosaik.util.logger.Logger;
 import lombok.Getter;
 import ola.OlaClient;
 
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+
 public class LedHandler {
 
     @Getter private static LedHandler instance;
@@ -12,7 +15,8 @@ public class LedHandler {
     private Logger logger = Logger.getInstance(getClass());
 
     @Getter private final DMXChannel[] dmxChannels = new DMXChannel[511];
-    private OlaClient olaClient;
+    private final OlaClient olaClient;
+    private Lock lock = new ReentrantLock();
     @Getter private short master;
 
     public LedHandler() throws Exception {
@@ -22,35 +26,61 @@ public class LedHandler {
 
     public void setChannelSilent(int channel, short value, boolean masterable) {
         channel--;
-        dmxChannels[channel] = new DMXChannel(value, masterable);
+        lock.lock();
+        try {
+            dmxChannels[channel] = new DMXChannel(value, masterable);
+        } finally {
+            lock.unlock();
+        }
     }
 
     public void setChannel(int channel, short value, boolean masterable) {
         channel--;
-        dmxChannels[channel] = new DMXChannel(value, masterable);
-        logger.info("setting channel " + channel + " to " + value);
-        //TODO stats? Timer timer = new Timer();
-        //timer.start();
-        refresh();
+        lock.lock();
+        try {
+            dmxChannels[channel] = new DMXChannel(value, masterable);
+            logger.info("setting channel " + channel + " to " + value);
+            //TODO stats? Timer timer = new Timer();
+            //timer.start();
+            refresh0();
+        } finally {
+            lock.unlock();
+        }
         //logger.info("done in " + timer.getDelay());
     }
 
     public void refresh() {
+        refresh0();
+    }
+
+    private void refresh0() {
         olaClient.sendDmx(1, getOutputDMX());
     }
 
     public void setMaster(short master) {
-        this.master = master;
-        refresh();
+        lock.lock();
+        try {
+            this.master = master;
+            refresh0();
+        } finally {
+            lock.unlock();
+        }
     }
 
     public short getRawValue(int channel) {
         channel--;
-        DMXChannel dmx = dmxChannels[channel];
-        return dmx == null ? 0 : dmx.getRawValue();
+        lock.lock();
+        short val;
+        try {
+            DMXChannel dmx = dmxChannels[channel];
+            val = dmx == null ? 0 : dmx.getRawValue();
+        } finally {
+            lock.unlock();
+        }
+        return val;
     }
 
-    public short[] getOutputDMX() {
+    private short[] getOutputDMX() {
         short[] out = new short[511];
         int i = 0;
         for (DMXChannel channel : dmxChannels) {

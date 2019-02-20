@@ -8,11 +8,11 @@ import java.util.concurrent.Executors;
 
 public class AnimationExecutor {
 
-    private ExecutorService executorService = Executors.newFixedThreadPool(4);
+    private ExecutorService executor = Executors.newFixedThreadPool(8);
 
     public void execute(Animation animation) {
         ExecutionContext context = new ExecutionContext(animation);
-        executorService.execute(() -> {
+        executor.execute(() -> {
             for (short i = 0; i < context.getAnimation().getEnd(); i++) {
                 long start = System.currentTimeMillis();
                 for (KeyFrame frame : animation.getKeyFrames().values()) {
