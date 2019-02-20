@@ -1,12 +1,18 @@
 package team.gutterteam123.ledanimation.animation;
 
 import io.github.splotycode.mosaik.util.ThreadUtil;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import team.gutterteam123.ledanimation.animation.keyframes.KeyFrame;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class AnimationExecutor {
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public final class AnimationExecutor {
+
+    @Getter private static AnimationExecutor instance = new AnimationExecutor();
 
     private ExecutorService executor = Executors.newFixedThreadPool(8);
 

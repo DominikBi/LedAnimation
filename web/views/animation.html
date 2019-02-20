@@ -1,29 +1,32 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Animations</title>
-</head>
-<body>
-<table id="animations" class="table table-dark table-striped table-hover dataTable">
+<table id="animation" class="table table-dark table-striped table-hover dataTable">
     <thead>
     <tr>
-        <th scope="col">Type</th>
         <th scope="col">Name</th>
         <th scope="col">Actions</th>
     </tr>
     </thead>
-
     <tbody>
-    $@Animations$
-    <th scope ="row">$@Type$</th>
-    <td>$@Name$</td>
-    <td>
-        <a role="button" type="button" class="btn btn-danger" href="/animation/delete?name=$name$"><i class="fa fa-trash"></i></a>
-        <a role="button" type="button" class="btn btn-info" href="/animation/settings?name=$name$"> <i class="fa fa-cog"></i></a>
-    </td>
-
+    $@animation$
+    <tr>
+        <th scope="row">$name$</th>
+        <td>
+            <a role="button" type="button" href="/animations/play?name=$name$" class="btn btn-success"> <i class="fa fa-play"></i></a>
+            <a role="button" type="button" href="/animations/edit?name=$name$" class="btn btn-info"> <i class="fa fa-pencil-alt"></i></a>
+            <a role="button" type="button" href="/animations/delete?name=$name$" class="btn btn-danger"><i class="fa fa-trash"></i></a>
+        </td>
+    </tr>
+    $@@$
     </tbody>
 </table>
-</body>
-</html>
+<form method="get" action="/animations/create" class="form-inline justify-content-center">
+    <div class="form-group mb-2">
+        <label for="name" class="sr-only">Name</label>
+        <input class="form-control" name="name" placeholder="Animation Name" id="name">
+    </div>
+    <button type="submit" class="btn btn-success mb-2">Add</button>
+</form>
+<script>
+    $(document).ready(function() {
+        $('#animation').DataTable();
+    } );
+</script>
