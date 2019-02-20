@@ -15,6 +15,7 @@ import java.io.File;
 import java.util.stream.Collectors;
 
 @Disabled
+@Deprecated
 public class Views {
 
 
