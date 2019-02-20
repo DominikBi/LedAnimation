@@ -26,7 +26,9 @@ public class DeviceHandler  {
     public ResponseContent view() {
         FileResponseContent content = new FileResponseContent(new File("web/views/device.html"));
         for (Controllable controllable : Controllable.FILE_SYSTEM.getEntries()) {
-            content.manipulate().patternCostomWithObj("devices", controllable, new Pair<>("visible-status", controllable.isVisible() ? "primary" : "secondary"));
+            content.manipulate().patternCostomWithObj("devices", controllable,
+                    new Pair<>("visible-status", controllable.isVisible() ? "primary" : "secondary"),
+                    new Pair<>("eye", controllable.isVisible() ? "" : "-slash"));
         }
         return content;
     }
@@ -59,7 +61,7 @@ public class DeviceHandler  {
     public void setVisible(@RequiredGet(value = "name") String name, Response response){
         Controllable controllable = Controllable.FILE_SYSTEM.getEntry(name);
         controllable.setVisible(!controllable.isVisible());
-        System.out.println("set visible of " + name + " " + controllable.displayName() + " " + controllable.isVisible());
+        //System.out.println("set visible of " + name + " " + controllable.displayName() + " " + controllable.isVisible());
         Controllable.FILE_SYSTEM.putEntry(name, controllable);
         response.redirect("/device", false);
     }
