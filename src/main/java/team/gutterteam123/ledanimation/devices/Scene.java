@@ -14,6 +14,8 @@ import java.util.Map;
 @AllArgsConstructor
 public class Scene implements Serializable  {
 
+    private static final long serialVersionUID = 1L;
+
     public static final FileSystem<Scene> FILE_SYSTEM = LinkBase.getInstance().getLink(Links.PARSING_FILEPROVIDER).provide("scenes", new SerialisedEntryParser());
 
     private String name;

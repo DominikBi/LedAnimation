@@ -20,6 +20,9 @@ public class DeviceGroup implements Controllable, EntryListener {
     private String name;
     @Getter @Setter private boolean visible;
 
+    @Setter
+    private int priority;
+
     public DeviceGroup() {
         devices = new ArrayList<>();
     }
@@ -96,5 +99,10 @@ public class DeviceGroup implements Controllable, EntryListener {
         for (String device : rawDevices) {
             devices.add((Device) Controllable.FILE_SYSTEM.getEntry(device));
         }
+    }
+
+    @Override
+    public int priority() {
+        return priority;
     }
 }

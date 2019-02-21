@@ -3,6 +3,7 @@ package team.gutterteam123.ledanimation.handlers;
 import io.github.splotycode.mosaik.util.Pair;
 import io.github.splotycode.mosaik.webapi.handler.anotation.check.Mapping;
 import io.github.splotycode.mosaik.webapi.handler.anotation.handle.RequiredGet;
+import io.github.splotycode.mosaik.webapi.request.Request;
 import io.github.splotycode.mosaik.webapi.response.content.ResponseContent;
 import io.github.splotycode.mosaik.webapi.response.content.file.FileResponseContent;
 import io.github.splotycode.mosaik.webapi.response.content.manipulate.pattern.PatternCommand;
@@ -44,8 +45,18 @@ public class LiveHandler {
     @Mapping("liveaction/setvalue")
     public void setValue(@RequiredGet("device") String deviceName, @RequiredGet("channel") String channel, @RequiredGet("value") short value) {
         Controllable device = Controllable.FILE_SYSTEM.getEntry(deviceName);
-        System.out.println(channel + " " + value);
         device.setChannel(ChannelType.fromDisplayName(channel), value);
+    }
+
+    @Mapping("liveaction/updatePrio")
+    public void updatePrio(Request request) {
+        System.out.println("heyy");
+        request.getGet().forEach((device, o) -> {
+            String value = o.iterator().next();
+            Controllable controllable = Controllable.FILE_SYSTEM.getEntry(device);
+            controllable.setPriority(Integer.valueOf(value));
+            Controllable.FILE_SYSTEM.putEntry(device, controllable);
+        });
     }
 
     @Mapping("liveaction/setrgb")

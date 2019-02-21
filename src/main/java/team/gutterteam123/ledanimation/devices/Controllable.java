@@ -37,6 +37,11 @@ public interface Controllable extends Serializable, Comparable<Controllable> {
         return getClass().getSimpleName();
     }
 
+    @HandleAsField(name = "priority")
+    int priority();
+
+    void setPriority(int priority);
+
     boolean isVisible();
 
     void setVisible(boolean visible);

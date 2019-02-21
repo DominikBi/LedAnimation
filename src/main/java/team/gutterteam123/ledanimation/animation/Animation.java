@@ -19,6 +19,8 @@ import java.util.Map;
 @EqualsAndHashCode
 public class Animation implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+
     public static final FileSystem<Animation> FILE_SYSTEM = LinkBase.getInstance().getLink(Links.PARSING_FILEPROVIDER).provide("animation", new SerialisedEntryParser());
 
     private int fps;
