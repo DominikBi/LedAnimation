@@ -1,13 +1,10 @@
- .body{
- background: #545454;
- }
+
  .slider{
  -webkit-appearance: none;
     position: relative;
 
-    width: 1200px;
-    height: 130px;
-    background: #545454;
+    width: 130px;
+    height: 100px;
     outline: none;
     opacity:0.7;
     -webkit-transition: .2s;
@@ -37,4 +34,23 @@
    height:100px;
    width:200px;
    font-size: 30px;
+   }
+   .timeline{
+   position: relative;
+   max-width:1200px;
+   max-height:200px;
+   margin: 0 auto;
+   }
+   .timeline::after{
+   content: '';
+   position: absolute;
+   width: 6px;
+   top:0;
+   bottom: 0;
+   left: 50%;
+   margin left: -3px;
+   }
+   .content {
+   position: relative;
+   border-radius:6px;
    }

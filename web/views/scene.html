@@ -1,0 +1,38 @@
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+    <h1 class="h1" style="padding-top:12px">Scenes</h1>
+</div>
+<table id="scenes" class="table table-dark table-striped table-hover dataTable">
+    <thead>
+    <tr>
+        <th scope="col">Name</th>
+        <th scope="col">Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    $@scenes$
+    <tr>
+        <th scope="row">$name$</th>
+        <td>
+            <a role="button" type="button" href="/scenes/play?name=$name$" class="btn btn-success"> <i class="fa fa-play"></i></a>
+            <a role="button" type="button" class="btn btn-danger" href="/scenes/delete?name=$name$"><i class="fa fa-trash"></i></a>
+        </td>
+    </tr>
+    $@@$
+    </tbody>
+</table>
+
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+    <h1 class="h2">Create new Scene</h1>
+</div>
+<form method="get" action="/scenes/create" class="form-inline justify-content-center">
+    <div class="form-group mb-2">
+        <label for="name" class="sr-only">Name</label>
+        <input class="form-control" name="name" placeholder="Scene Name" id="name">
+    </div>
+    <button type="submit" class="btn btn-success mb-2">Add</button>
+</form>
+<script>
+    $(document).ready(function() {
+        $('#scenes').DataTable();
+    } );
+</script>

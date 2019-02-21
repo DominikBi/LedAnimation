@@ -3,7 +3,6 @@ package team.gutterteam123.ledanimation.handlers;
 import io.github.splotycode.mosaik.util.Pair;
 import io.github.splotycode.mosaik.webapi.handler.anotation.check.Mapping;
 import io.github.splotycode.mosaik.webapi.handler.anotation.handle.RequiredGet;
-import io.github.splotycode.mosaik.webapi.request.Request;
 import io.github.splotycode.mosaik.webapi.response.Response;
 import io.github.splotycode.mosaik.webapi.response.content.ResponseContent;
 import io.github.splotycode.mosaik.webapi.response.content.file.FileResponseContent;
@@ -13,12 +12,26 @@ import team.gutterteam123.ledanimation.devices.Controllable;
 import team.gutterteam123.ledanimation.devices.Device;
 import team.gutterteam123.ledanimation.devices.DeviceGroup;
 
+import java.io.File;
+import java.text.CollationElementIterator;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+@SuppressWarnings("unused")
 public class DeviceHandler  {
+
+    @Mapping(value = "views/device")
+    public ResponseContent view() {
+        FileResponseContent content = new FileResponseContent(new File("web/views/device.html"));
+        for (Controllable controllable : Controllable.FILE_SYSTEM.getEntries()) {
+            content.manipulate().patternCostomWithObj("devices", controllable,
+                    new Pair<>("visible-status", controllable.isVisible() ? "primary" : "secondary"),
+                    new Pair<>("eye", controllable.isVisible() ? "" : "-slash"));
+        }
+        return content;
+    }
 
     @Mapping(value = "devices/create")
     public void create(@RequiredGet(value = "name") String name, @RequiredGet(value = "type") int type, Response response){
@@ -28,7 +41,19 @@ public class DeviceHandler  {
 
     @Mapping(value = "devices/delete")
     public void delete(@RequiredGet(value = "name") String name, Response response){
+        /* Remove device in groups */
+        for (Controllable controllable : Controllable.FILE_SYSTEM.getEntries()) {
+            if (controllable instanceof DeviceGroup) {
+                DeviceGroup group = (DeviceGroup) controllable;
+                if (group.getRawDevices().contains(name)) {
+                    group.unregisterDevice((Device) Controllable.FILE_SYSTEM.getEntry(name));
+                    Controllable.FILE_SYSTEM.putEntry(group.displayName(), group);
+                }
+            }
+        }
+
         Controllable.FILE_SYSTEM.deleteEntry(name);
+
         response.redirect("/device", false);
     }
 
@@ -36,37 +61,32 @@ public class DeviceHandler  {
     public void setVisible(@RequiredGet(value = "name") String name, Response response){
         Controllable controllable = Controllable.FILE_SYSTEM.getEntry(name);
         controllable.setVisible(!controllable.isVisible());
-        System.out.println("Set visible of " + name + " " + controllable.displayName() + " " + controllable.isVisible());
+        //System.out.println("set visible of " + name + " " + controllable.displayName() + " " + controllable.isVisible());
         Controllable.FILE_SYSTEM.putEntry(name, controllable);
         response.redirect("/device", false);
     }
 
-
-    @AllArgsConstructor
-    public static class SelectableDevice {
-        private String name;
-        private String selected;
-    }
-
     @Mapping(value = "devices/settings")
-    public ResponseContent settings(@RequiredGet(value = "name") String name){
-        Controllable controllable = Controllable.FILE_SYSTEM.getEntry(name);
+    public ResponseContent settings(@RequiredGet(value = "name") Controllable controllable){
+        String name = controllable.displayName();
         if (controllable instanceof DeviceGroup) {
             DeviceGroup group = (DeviceGroup) controllable;
 
-            List<SelectableDevice> selectables = new ArrayList<>();
-
             FileResponseContent content = new FileResponseContent("web/settings_group.html");
-            for (Device device : group.getDevices()) {
-                selectables.add(new SelectableDevice(device.displayName(), "selected"));
+
+            for (Device child : group.getDevices()) {
+                content.manipulate().patternCostomWithObj("linked", child, new Pair<>("device", group.displayName()));
             }
-            for (Controllable controllables : Controllable.FILE_SYSTEM.getEntries()) {
-                if (controllables instanceof Device && !group.getDevices().contains(controllables)) {
-                    selectables.add(new SelectableDevice(controllables.displayName(), ""));
+
+            List<Device> selectable = new ArrayList<>();
+            for (Controllable cont : Controllable.FILE_SYSTEM.getEntries()) {
+                System.out.println(cont + " " + group + " " + group.getDevices());
+                if (cont instanceof Device && !group.getRawDevices().contains(cont.displayName())) {
+                    selectable.add((Device) cont);
                 }
             }
-            content.manipulate().patternListName("devices", selectables);
-            content.manipulate().variable("name", name);
+            content.manipulate().patternListName("devices", selectable);
+            content.manipulate().variable("device", name);
             return content;
         } else {
             Device device = (Device) controllable;
@@ -100,15 +120,26 @@ public class DeviceHandler  {
     }
 
     @Mapping("devices/update")
-    public void update(@RequiredGet("name") String name, Response response, Request request) {
-        Collection<String> col = request.getGetParameter("devices");
-        DeviceGroup group = (DeviceGroup) Controllable.FILE_SYSTEM.getEntries();
+    public void update(@RequiredGet("channel") String name, Response response) {
+        DeviceGroup group = (DeviceGroup) Controllable.FILE_SYSTEM.getEntry(name);
         group.getDevices().clear();
-        for(String curCol : col){
-        group.registerDevice((Device) Device.FILE_SYSTEM.getEntry(curCol));
-        }
-        new DeviceGroup();
         response.redirect("/device", false);
+    }
+
+    @Mapping("devices/addToGroup")
+    public void addToGroup(@RequiredGet("device") String deviceName, @RequiredGet("add") Controllable add, Response response) {
+        DeviceGroup device = (DeviceGroup) Controllable.FILE_SYSTEM.getEntry(deviceName);
+        device.registerDevice((Device) add);
+        Controllable.FILE_SYSTEM.putEntry(deviceName, device);
+        response.redirect("/devices/settings/?name=" + deviceName, false);
+    }
+
+    @Mapping("devices/removeFromGroup")
+    public void removeFromGroup(@RequiredGet("device") String deviceName, @RequiredGet("remove") Controllable remove, Response response) {
+        DeviceGroup device = (DeviceGroup) Controllable.FILE_SYSTEM.getEntry(deviceName);
+        device.unregisterDevice((Device) remove);
+        Controllable.FILE_SYSTEM.putEntry(deviceName, device);
+        response.redirect("/devices/settings/?name=" + deviceName, false);
     }
 
 }

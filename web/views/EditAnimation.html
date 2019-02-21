@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Create Animation</title>
+</head>
+<body>
+<input id="userInputStart" width="60" height="40">
+<input id="userInputEnd" width="60" height="40">
+<canvas id="table" width="200" height="100" style="border:1px solid #000"></canvas>
+<button onclick="draw()">Add</button>
+
+<script>
+function draw(){
+    var canvas = document.getElementById("table");
+    var ctx = canvas.getContext("2d");
+    var userStart = document.getElementById("userInputStart").value;
+    var userEnd = document.getElementById("userInputEnd").value;
+    var rand = Math.floor(70*Math.random()) + 10;
+    ctx.moveTo(userStart, rand);
+    ctx.lineTo(userEnd, rand);
+    ctx.stroke();
+    }
+</script>
+
+    <a role="button" href="animations?name=$name$">Submit</a>
+</body>
+</html>
