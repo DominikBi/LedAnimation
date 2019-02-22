@@ -18,9 +18,9 @@
         </div>
     </form>
 </div>
-<div class="d-flex" style="height: 100%">
+<div id="live-devices" class="d-flex" style="height: 100%">
 $@devices$
-    <div class="border border-primary rounded align-items-center" style="min-width: 5vw !important;padding:0 15px;flex-shrink: 0;flex-grow: 1;">
+    <div data-prio="$priority$" class="border border-primary rounded align-items-center device" style="min-width: 5vw !important;padding:0 15px;flex-shrink: 0;flex-grow: 1">
         <h3>$name$</h3>
         $@color$
         <div>
@@ -41,6 +41,7 @@ $@devices$
 $@@$
 </div>
 <script src="/static/3party/spectrum.js"></script>
+<script src="/static/3party/sortable.js"></script>
 <script>
 $("#master").on('input', function() {
     $.ajax({
@@ -76,4 +77,41 @@ $('.color-select').each(function(){
         }
     });
 });
+new Sortable(document.getElementById('live-devices'), {
+	animation: 150,
+	ghostClass: 'blue-background-class',
+	onUpdate: function (/**Event*/evt, /**Event*/originalEvent) {
+	    var devices = new Map();
+	    var i = 0;
+	    $('.device').each(function(){
+	        devices.set($(this).find("h3").text(), i);
+	        i = i + 1;
+        });
+        console.log(devices);
+        var first = 1;
+        var request = "";
+        devices.forEach(function(value, key, map){
+            if (first == 0) {
+                request += "&";
+            }
+            request += key + "=" + value;
+            first = 0;
+        });
+        console.log(request);
+        $.ajax({
+            url : "/liveaction/updatePrio",
+            type: "get",
+            data: request
+        });
+	}
+});
+devices = $(".device");
+devices.sort(function (a, b) {
+      var contentA =parseInt( $(a).attr('data-prio'));
+      var contentB =parseInt( $(b).attr('data-prio'));
+      console.log(contentA + " " + contentB);
+    return contentA - contentB;
+});
+console.log(devices);
+$("#live-devices").html(devices);
 </script>

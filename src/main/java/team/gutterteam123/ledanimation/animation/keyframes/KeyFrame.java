@@ -8,6 +8,8 @@ import team.gutterteam123.ledanimation.animation.ExecutionContext;
 @EqualsAndHashCode
 public abstract class KeyFrame {
 
+    private static final long serialVersionUID = 1L;
+
     protected int id;
     protected short start, end;
 

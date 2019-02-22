@@ -9,6 +9,7 @@ import lombok.Getter;
 import lombok.Setter;
 import team.gutterteam123.ledanimation.animation.keyframes.KeyFrame;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -16,7 +17,9 @@ import java.util.Map;
 
 @Getter @Setter
 @EqualsAndHashCode
-public class Animation {
+public class Animation implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     public static final FileSystem<Animation> FILE_SYSTEM = LinkBase.getInstance().getLink(Links.PARSING_FILEPROVIDER).provide("animation", new SerialisedEntryParser());
 
@@ -26,4 +29,7 @@ public class Animation {
     private String name;
     private Map<String, KeyFrame> keyFrames = new HashMap<>();
 
+    public Animation(String name) {
+        this.name = name;
+    }
 }

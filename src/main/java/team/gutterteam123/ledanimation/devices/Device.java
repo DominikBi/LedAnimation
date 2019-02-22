@@ -16,6 +16,8 @@ public class Device implements Controllable {
     private String name;
     @Getter @Setter
     private boolean visible;
+    @Setter
+    private int priority;
 
     public Map<ChannelType, Integer> getChannelMap() {
         return channels;
@@ -45,5 +47,8 @@ public class Device implements Controllable {
         return new ChannelValue(true, LedHandler.getInstance().getRawValue(channels.get(type)));
     }
 
-
+    @Override
+    public int priority() {
+        return priority;
+    }
 }
