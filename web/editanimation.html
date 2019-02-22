@@ -5,24 +5,45 @@
     <title>Create Animation</title>
 </head>
 <body>
-<input id="userInputStart" width="60" height="40">
+<a>End:</a>
 <input id="userInputEnd" width="60" height="40">
+<a>Length:</a>
+<input id="length" width="60" height="40" title="length">
 <canvas id="table" width="200" height="100" style="border:1px solid #000"></canvas>
 <button onclick="draw()">Add</button>
-
 <script>
+
+</script>
+<script>
+var alEnd = [];
+var alLength = [];
 function draw(){
     var canvas = document.getElementById("table");
     var ctx = canvas.getContext("2d");
-    var userStart = document.getElementById("userInputStart").value;
     var userEnd = document.getElementById("userInputEnd").value;
+    var length = document.getElementById("length").value;
+    alLength[alLength.length] = length;
+    alEnd[alEnd.length] = userEnd;
     var rand = Math.floor(70*Math.random()) + 10;
-    ctx.moveTo(userStart, rand);
+    ctx.moveTo(userEnd - length, rand);
     ctx.lineTo(userEnd, rand);
     ctx.stroke();
     }
+function send(var data, var url){
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", url, true);
+    xhr.setRequestHeader("Integer", "application/json");
+    JSON.stringify(data);
+    xhr.send(data);
+
+}
+function sendData(){
+
+send()
+}
+
 </script>
 
-    <a role="button" href="animations?name=$name$">Submit</a>
+    <button onclick="sendData()">Submit</button>
 </body>
 </html>

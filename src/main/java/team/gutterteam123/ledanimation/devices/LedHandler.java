@@ -22,6 +22,7 @@ public class LedHandler {
     public LedHandler() throws Exception {
         instance = this;
         olaClient = new OlaClient();
+
     }
 
     public void setChannelSilent(int channel, short value, boolean masterable) {
