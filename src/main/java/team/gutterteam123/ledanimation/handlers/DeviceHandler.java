@@ -142,5 +142,14 @@ public class DeviceHandler  {
         response.redirect("/devices/settings/?name=" + deviceName, false);
     }
 
+    @Mapping("devices/editchannel")
+    public void editChannel(Response response, @RequiredGet("device") Controllable controllable, @RequiredGet("type") String type, @RequiredGet("channel") int channel) {
+        Device device = (Device) controllable;
+        ChannelType channelType = ChannelType.fromDisplayName(type);
+        device.getChannelMap().put(channelType, channel);
+        Controllable.FILE_SYSTEM.putEntry(device.displayName(), device);
+        response.redirect("/devices/settings/?name=" + device.displayName(), false);
+    }
+
 }
 

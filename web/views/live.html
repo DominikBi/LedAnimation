@@ -43,6 +43,15 @@ $@@$
 <script src="/static/3party/spectrum.js"></script>
 <script src="/static/3party/sortable.js"></script>
 <script>
+devices = $(".device");
+devices.sort(function (a, b) {
+      var contentA =parseInt( $(a).attr('data-prio'));
+      var contentB =parseInt( $(b).attr('data-prio'));
+      console.log(contentA + " " + contentB);
+    return contentA - contentB;
+});
+console.log(devices);
+$("#live-devices").html(devices);
 $("#master").on('input', function() {
     $.ajax({
         url : this.form.action,
@@ -105,13 +114,5 @@ new Sortable(document.getElementById('live-devices'), {
         });
 	}
 });
-devices = $(".device");
-devices.sort(function (a, b) {
-      var contentA =parseInt( $(a).attr('data-prio'));
-      var contentB =parseInt( $(b).attr('data-prio'));
-      console.log(contentA + " " + contentB);
-    return contentA - contentB;
-});
-console.log(devices);
-$("#live-devices").html(devices);
+
 </script>
