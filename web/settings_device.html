@@ -47,9 +47,11 @@
         <tr>
             <th scope="row">$type$</th>
             <td>
-                <form method="get" action="/devices/editchannel">
-                    <input value="$channel$" class="form-control editchannel" name="channel" type="number" placeholder="channel">
-                    <input type="hidden" value="Add" class="btn btn-success">
+                <form class="form-inline justify-content-center" method="get" action="/devices/editchannel">
+                    <input type="hidden" value="$type$" name="type">
+                    <input type="hidden" value="$device$" name="device">
+                    <input data-originalvalue="$channel$" value="$channel$" class="form-control editchannel" name="channel" type="number" placeholder="channel">
+                    <button type="submit" class="btn btn-info save-button" style="display: none"><i class="fas fa-pencil-alt"></i></button>
                 </form>
             </td>
             <td>
@@ -78,7 +80,17 @@
 <script src="/static/3party/datatables.js"></script>
 <script src="/static/3party/datatable_bootstrap.js"></script>
 <script>
-
+    $(".editchannel").each(function(){
+        $(this).on('change paste keyup', function() {
+            console.log($(this).val() + " " + $(this).attr("data-originalvalue"));
+            var changed = $(this).val() != $(this).attr("data-originalvalue");
+            if (changed) {
+                $(this).next().filter('.save-button').show();
+            } else {
+                $(this).next().filter('.save-button').hide();
+            }
+        });
+    });
 </script>
 </body>
 </html>
