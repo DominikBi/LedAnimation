@@ -38,12 +38,14 @@ public class LedAnimation extends Application implements WebApplicationType {
         ledHandler = new LedHandler();
 
         configureWebServer();
-        listen(5555);
+        listen(5555, true);
     }
 
     private void configureWebServer() {
         setWebServer(new NettyWebServer(this));
         putConfig(WebConfig.NETTY_THREADS, 1);
+        putConfig(WebConfig.IGNORE_NO_SSL_RECORD, true);
+        //putConfig(WebConfig.FORCE_HTTPS, true);
         routingHandler.setUp();
     }
 

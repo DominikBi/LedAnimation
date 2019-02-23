@@ -46,7 +46,12 @@
         $@used_channels$
         <tr>
             <th scope="row">$type$</th>
-            <td>$channel$</td>
+            <td>
+                <form method="get" action="/devices/editchannel">
+                    <input value="$channel$" class="form-control editchannel" name="channel" type="number" placeholder="channel">
+                    <input type="hidden" value="Add" class="btn btn-success">
+                </form>
+            </td>
             <td>
                 <a role="button" type="button" class="btn btn-danger" href="/devices/deletechannel?device=$device$&type=$type$"><i class="fa fa-trash"></i></a>
             </td>
@@ -62,7 +67,7 @@
                     </select>
                 </form>
             </td>
-            <td><input form="form" class="form-control" name="channel" type="number"></td>
+            <td><input form="form" class="form-control" name="channel" placeholder="channel" type="number"></td>
             <td><button form="form" type="submit" class="btn btn-success">Add</button><input form="form" type="hidden" name="device" value="$device$"></td>
         </tr>
         </tbody>
@@ -72,5 +77,8 @@
 <script src="/static/3party/bootstrap/js/bootstrap.min.js"></script>
 <script src="/static/3party/datatables.js"></script>
 <script src="/static/3party/datatable_bootstrap.js"></script>
+<script>
+
+</script>
 </body>
 </html>
