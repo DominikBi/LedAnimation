@@ -4,7 +4,7 @@
 </div>
 <div class="btn-toolbar mb-3" role="toolbar" aria-label="Toolbar with button groups">
     <div class="btn-group mr-2" role="group" aria-label="First group">
-        <button type="button" class="btn btn-secondary">1</button>
+        <button type="button" class="btn btn-secondary" id="toggle-drag-and-drop"><i class="fas fa-arrows-alt"></i></button>
         <button type="button" class="btn btn-secondary">2</button>
         <button type="button" class="btn btn-secondary">3</button>
         <button type="button" class="btn btn-secondary">4</button>
@@ -42,6 +42,7 @@ $@@$
 </div>
 <script src="/static/3party/spectrum.js"></script>
 <script src="/static/3party/sortable.js"></script>
+<script src="/static/3party/cookies.js"></script>
 <script>
 devices = $(".device");
 devices.sort(function (a, b) {
@@ -50,8 +51,8 @@ devices.sort(function (a, b) {
       console.log(contentA + " " + contentB);
     return contentA - contentB;
 });
-console.log(devices);
 $("#live-devices").html(devices);
+
 $("#master").on('input', function() {
     $.ajax({
         url : this.form.action,
@@ -86,7 +87,7 @@ $('.color-select').each(function(){
         }
     });
 });
-new Sortable(document.getElementById('live-devices'), {
+var sortable = new Sortable(document.getElementById('live-devices'), {
 	animation: 150,
 	ghostClass: 'blue-background-class',
 	onUpdate: function (/**Event*/evt, /**Event*/originalEvent) {
@@ -114,5 +115,22 @@ new Sortable(document.getElementById('live-devices'), {
         });
 	}
 });
+
+if ($.cookie("disable_drag_and_drop") != null) {
+    $("#toggle-drag-and-drop").removeClass("btn-secondary");
+    $("#toggle-drag-and-drop").addClass("btn-danger");
+    sortable.option("disabled", true);
+}
+$("#toggle-drag-and-drop").on("click", function() {
+    if ($.cookie("disable_drag_and_drop") == null) {
+        $.cookie("disable_drag_and_drop", "1");
+    } else {
+        $.removeCookie("disable_drag_and_drop");
+    }
+    $("#toggle-drag-and-drop").toggleClass("btn-secondary");
+    $("#toggle-drag-and-drop").toggleClass("btn-danger");
+    sortable.option("disabled", !sortable.option("disabled"));
+});
+
 
 </script>
