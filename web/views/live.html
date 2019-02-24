@@ -3,11 +3,18 @@
     <h1 class="h1" style="padding-top:12px">Live</h1>
 </div>
 <div class="btn-toolbar mb-3" role="toolbar" aria-label="Toolbar with button groups">
+    <form method="get" action="/liveaction/togglemute" id="togglemute"></form>
+    $@form_scene$
+        <form method="get" action="/scenes/play" id="sc_$name$"></form>
+    $@@$
     <div class="btn-group mr-2" role="group" aria-label="First group">
-        <button type="button" class="btn btn-secondary" id="toggle-drag-and-drop"><i class="fas fa-arrows-alt"></i></button>
-        <button type="button" class="btn btn-secondary">2</button>
-        <button type="button" class="btn btn-secondary">3</button>
-        <button type="button" class="btn btn-secondary">4</button>
+        <button type="button" class="btn btn-secondary" id="toggle-drag-and-drop"><i class="fa fa-arrows-alt"></i></button>
+        <button type="submit" form="togglemute" class="btn btn-$mute_status$" id="toggle-mute"><i class="fa fa-volume-$mute_icon$"></i></button>
+        $@scene$
+            <input type="hidden" name="fromlive" value="1" form="sc_$name$">
+            <input type="hidden" value="$name$" name="name" form="sc_$name$">
+            <button form="sc_$name$" type="button" class="btn btn-secondary scene-play" data-toggle="tooltip" data-placement="bottom" title="$name$"><i class="fa fa-play"></i></button>
+        $@@$
     </div>
     <form method="get" action="/liveaction/setmaster">
         <div class="input-group">
@@ -48,11 +55,13 @@ devices = $(".device");
 devices.sort(function (a, b) {
       var contentA =parseInt( $(a).attr('data-prio'));
       var contentB =parseInt( $(b).attr('data-prio'));
-      console.log(contentA + " " + contentB);
     return contentA - contentB;
 });
 $("#live-devices").html(devices);
 
+$(function () {
+  $('[data-toggle="tooltip"]').tooltip();
+})
 $("#master").on('input', function() {
     $.ajax({
         url : this.form.action,
@@ -77,7 +86,7 @@ $('.color-select').each(function(){
         cancelText: "",
         chooseText: "",
         move: function(color) {
-            console.log(color.toRgb());
+            //console.log(color.toRgb());
             var get = "device=" + device + "&r=" + color.toRgb().r + "&g=" + color.toRgb().g + "&b=" + color.toRgb().b;
             $.ajax({
                 url : "/liveaction/setrgb",
@@ -97,7 +106,7 @@ var sortable = new Sortable(document.getElementById('live-devices'), {
 	        devices.set($(this).find("h3").text(), i);
 	        i = i + 1;
         });
-        console.log(devices);
+        //console.log(devices);
         var first = 1;
         var request = "";
         devices.forEach(function(value, key, map){
@@ -115,6 +124,31 @@ var sortable = new Sortable(document.getElementById('live-devices'), {
         });
 	}
 });
+function is_touch_device() {
+  var prefixes = ' -webkit- -moz- -o- -ms- '.split(' ');
+  var mq = function(query) {
+    return window.matchMedia(query).matches;
+  }
+
+  if (('ontouchstart' in window) || window.DocumentTouch && document instanceof DocumentTouch) {
+    return true;
+  }
+
+  // include the 'heartz' as a way to have a non matching MQ to help terminate the join
+  // https://git.io/vznFH
+  var query = ['(', prefixes.join('touch-enabled),('), 'heartz', ')'].join('');
+  return mq(query);
+}
+$('.scene-play').each(function(){
+    console
+    if (is_touch_device()) {
+        $(this).on('dblclick', function() {
+            $(this.form).submit();
+        });
+    } else {
+        $(this).prop("type", "submit");
+    }
+});
 
 if ($.cookie("disable_drag_and_drop") != null) {
     $("#toggle-drag-and-drop").removeClass("btn-secondary");
@@ -131,6 +165,4 @@ $("#toggle-drag-and-drop").on("click", function() {
     $("#toggle-drag-and-drop").toggleClass("btn-danger");
     sortable.option("disabled", !sortable.option("disabled"));
 });
-
-
 </script>

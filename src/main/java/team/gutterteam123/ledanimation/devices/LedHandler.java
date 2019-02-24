@@ -1,6 +1,6 @@
 package team.gutterteam123.ledanimation.devices;
 
-import io.github.splotycode.mosaik.util.Timer;
+import io.github.splotycode.mosaik.util.ExceptionUtil;
 import io.github.splotycode.mosaik.util.logger.Logger;
 import lombok.Getter;
 import ola.OlaClient;
@@ -12,12 +12,21 @@ public class LedHandler {
 
     @Getter private static LedHandler instance;
 
+    static {
+        try {
+            instance = new LedHandler();
+        } catch (Exception e) {
+            ExceptionUtil.throwRuntime(e);
+        }
+    }
+
     private Logger logger = Logger.getInstance(getClass());
 
-    @Getter private final DMXChannel[] dmxChannels = new DMXChannel[511];
+    private final DMXChannel[] dmxChannels = new DMXChannel[511];
     private final OlaClient olaClient;
     private Lock lock = new ReentrantLock();
     @Getter private short master;
+    @Getter private boolean mute;
 
     public LedHandler() throws Exception {
         instance = this;
@@ -47,11 +56,25 @@ public class LedHandler {
         } finally {
             lock.unlock();
         }
-        //logger.info("done in " + timer.getDelay());
+    }
+
+    public void toogleMute() {
+        lock.lock();
+        try {
+            mute = !mute;
+            refresh0();
+        } finally {
+            lock.unlock();
+        }
     }
 
     public void refresh() {
-        refresh0();
+        lock.lock();
+        try {
+            refresh0();
+        } finally {
+            lock.unlock();
+        }
     }
 
     private void refresh0() {
@@ -62,6 +85,16 @@ public class LedHandler {
         lock.lock();
         try {
             this.master = master;
+            refresh0();
+        } finally {
+            lock.unlock();
+        }
+    }
+
+    public void setMute(boolean mute) {
+        lock.lock();
+        try {
+            this.mute = mute;
             refresh0();
         } finally {
             lock.unlock();
@@ -86,7 +119,9 @@ public class LedHandler {
         int i = 0;
         for (DMXChannel channel : dmxChannels) {
             if (channel != null) {
-                out[i] = channel.isMasterable() ? (short) (channel.getRawValue() * (master / 100f)) : channel.getRawValue();
+                out[i] = channel.isMasterable() ?
+                        (short) (channel.getRawValue() * ((mute ? 0f : master) / 100f)) :
+                        channel.getRawValue();
             }
             i++;
         }

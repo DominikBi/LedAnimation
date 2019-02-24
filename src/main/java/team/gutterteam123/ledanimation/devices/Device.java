@@ -1,5 +1,6 @@
 package team.gutterteam123.ledanimation.devices;
 
+import io.github.splotycode.mosaik.util.prettyprint.PrettyPrint;
 import lombok.Getter;
 import lombok.Setter;
 import team.gutterteam123.ledanimation.LedAnimation;
@@ -29,7 +30,7 @@ public class Device implements Controllable {
 
     @Override
     public void setChannel(ChannelType channel, short value) {
-        LedAnimation.getInstance().getLedHandler().setChannel(channels.get(channel), value, channel == ChannelType.BRIGHTNESS);
+        LedHandler.getInstance().setChannel(channels.get(channel), value, channel == ChannelType.BRIGHTNESS);
     }
 
     @Override

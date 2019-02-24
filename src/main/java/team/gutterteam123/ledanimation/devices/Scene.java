@@ -6,12 +6,12 @@ import io.github.splotycode.mosaik.runtime.LinkBase;
 import io.github.splotycode.mosaik.runtime.Links;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.io.Serializable;
 import java.util.Map;
 
 @Getter
-@AllArgsConstructor
 public class Scene implements Serializable  {
 
     private static final long serialVersionUID = 1L;
@@ -20,6 +20,13 @@ public class Scene implements Serializable  {
 
     private String name;
     private Map<String, Map<ChannelType, Short>> values;
+
+    public Scene(String name, Map<String, Map<ChannelType, Short>> values) {
+        this.name = name;
+        this.values = values;
+    }
+
+    @Getter @Setter private boolean visible;
 
     public void load() {
         for (Map.Entry<String, Map<ChannelType, Short>> device : values.entrySet()) {

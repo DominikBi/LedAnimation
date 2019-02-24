@@ -3,6 +3,7 @@ package team.gutterteam123.ledanimation.handlers;
 import io.github.splotycode.mosaik.util.Pair;
 import io.github.splotycode.mosaik.webapi.handler.anotation.check.Mapping;
 import io.github.splotycode.mosaik.webapi.handler.anotation.handle.RequiredGet;
+import io.github.splotycode.mosaik.webapi.request.Request;
 import io.github.splotycode.mosaik.webapi.response.Response;
 import io.github.splotycode.mosaik.webapi.response.content.ResponseContent;
 import io.github.splotycode.mosaik.webapi.response.content.file.FileResponseContent;
@@ -17,8 +18,10 @@ public class SceneHandler {
     @Mapping(value = "views/scene")
     public ResponseContent view() {
         FileResponseContent content = new FileResponseContent(new File("web/views/scene.html"));
-        for (Scene controllable : Scene.FILE_SYSTEM.getEntries()) {
-            content.manipulate().patternCostomWithObj("scenes", controllable);
+        for (Scene scene : Scene.FILE_SYSTEM.getEntries()) {
+            content.manipulate().patternCostomWithObj("scenes", scene,
+                    new Pair<>("visible-status", scene.isVisible() ? "primary" : "secondary"),
+                    new Pair<>("eye", scene.isVisible() ? "" : "-slash"));
         }
         return content;
     }
@@ -30,13 +33,13 @@ public class SceneHandler {
     }
 
     @Mapping(value = "scenes/play")
-    public void play(@RequiredGet(value = "name") String name, Response response){
+    public void play(@RequiredGet(value = "name") String name, Request request, Response response){
         Scene.FILE_SYSTEM.getEntry(name).load();
-        response.redirect("/scene", false);
+        response.redirect(request.getGet().containsKey("fromlive") ? "/live" : "/scene", false);
     }
 
     @Mapping(value = "scenes/create")
-    public void create(@RequiredGet(value = "name") String name, Response response){
+    public void create(@RequiredGet(value = "name") String name, Response response) {
         Map<String, Map<ChannelType, Short>> values = new HashMap<>();
         for (Controllable controllable : Controllable.FILE_SYSTEM.getEntries()) {
             Map<ChannelType, Short> channels = new HashMap<>();
@@ -46,6 +49,14 @@ public class SceneHandler {
             values.put(controllable.displayName(), channels);
         }
         Scene.FILE_SYSTEM.putEntry(name, new Scene(name, values));
+        response.redirect("/scene", false);
+    }
+
+    @Mapping("scenes/visible")
+    public void visible(@RequiredGet(value = "name") String name, Response response) {
+        Scene scene = Scene.FILE_SYSTEM.getEntry(name);
+        scene.setVisible(!scene.isVisible());
+        Scene.FILE_SYSTEM.putEntry(name, scene);
         response.redirect("/scene", false);
     }
 

@@ -57,7 +57,7 @@ public class Views {
     //@Mapping("/live")
     public ResponseContent live(){
         FileResponseContent content = new FileResponseContent(new File("web/live.html"));
-        content.manipulate().variable("master", LedAnimation.getInstance().getLedHandler().getMaster());
+        content.manipulate().variable("master", LedHandler.getInstance().getMaster());
         content.manipulate().pattern(PatternCommand.create("devices").createSecondaries(device -> {
             PatternCommand colorCommand = device.getTwo().createChild("color");
             if (device.getOne().supportsRGB()) {

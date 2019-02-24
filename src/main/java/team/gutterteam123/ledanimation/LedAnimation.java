@@ -29,13 +29,11 @@ public class LedAnimation extends Application implements WebApplicationType {
         return LinkBase.getApplicationManager().getApplicationByClass(LedAnimation.class);
     }
 
-    @Getter private LedHandler ledHandler;
     @Getter private RoutingHandler routingHandler = new RoutingHandler();
 
     @Override
     public void start(BootContext bootContext) throws Exception {
         LinkBase.getInstance().getLink(TransformerManager.LINK).registerPackage("team.gutterteam123.ledanimation.transformer");
-        ledHandler = new LedHandler();
 
         configureWebServer();
         listen(5555, true);
