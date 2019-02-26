@@ -21,7 +21,7 @@ public class LiveHandler {
         FileResponseContent content = new FileResponseContent(new File("web/views/live.html"));
         content.manipulate().variable("master", LedHandler.getInstance().getMaster());
         content.manipulate().variable("mute_status", LedHandler.getInstance().isMute() ? "danger" : "secondary");
-        content.manipulate().variable("mute_icon", LedHandler.getInstance().isMute() ? "off" : "up");
+        content.manipulate().variable("mute_icon", LedHandler.getInstance().isMute() ? "power-off" : "lightbulb");
 
         Iterable<Scene> scenes = Scene.FILE_SYSTEM.getEntries().stream().filter(Scene::isVisible).collect(Collectors.toList());
         content.manipulate().patternListName("form_scene", scenes);

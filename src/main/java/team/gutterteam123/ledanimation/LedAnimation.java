@@ -43,7 +43,7 @@ public class LedAnimation extends Application implements WebApplicationType {
         setWebServer(new NettyWebServer(this));
         putConfig(WebConfig.NETTY_THREADS, 1);
         putConfig(WebConfig.IGNORE_NO_SSL_RECORD, true);
-        //putConfig(WebConfig.FORCE_HTTPS, true);
+        putConfig(WebConfig.FORCE_HTTPS, false);
         routingHandler.setUp();
     }
 
