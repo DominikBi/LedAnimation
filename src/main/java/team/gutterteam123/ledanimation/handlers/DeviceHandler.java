@@ -35,6 +35,7 @@ public class DeviceHandler  {
 
     @Mapping(value = "devices/create")
     public void create(@RequiredGet(value = "name") String name, @RequiredGet(value = "type") int type, Response response){
+        name = name.replace(' ', '_');
         Controllable.FILE_SYSTEM.putEntry(name, type == 2 ? new DeviceGroup(name) : new Device(name));
         response.redirect("/device", false);
     }

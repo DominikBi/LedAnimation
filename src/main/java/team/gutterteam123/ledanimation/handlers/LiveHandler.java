@@ -71,6 +71,7 @@ public class LiveHandler {
         });
     }
 
+    @Deprecated
     @Mapping("liveaction/setrgb")
     public void setRGB(Request request, @RequiredGet("device") String deviceName, @RequiredGet("r") short r, @RequiredGet("g") short g, @RequiredGet("b") short b) {
         Controllable device = Controllable.FILE_SYSTEM.getEntry(deviceName);

@@ -34,13 +34,15 @@ public class Device implements Controllable {
     @Override
     public void setChannel(ChannelHandlerContext ctx, ChannelType channel, short value) {
         LedHandler.getInstance().setChannel(channels.get(channel), value, channel == ChannelType.BRIGHTNESS);
-        WebSocketHandler.getInstance().updateValue(ctx, this, channel);
-        if (ctx != null) {
-            for (Controllable controllable : Controllable.FILE_SYSTEM.getEntries()) {
-                if (controllable instanceof DeviceGroup) {
-                    if (((DeviceGroup) controllable).getRawDevices().contains(name)) {
-                        ChannelValue cValue = controllable.getValue(channel);
-                        ctx.writeAndFlush(new TextWebSocketFrame(controllable.displayName() + ":" + channel.displayName() + ":" + cValue.isSave() + ":" + cValue.getValue()));
+        if (!(channel.isRgbChannel() && supportsRGB())) {
+            WebSocketHandler.getInstance().updateValue(ctx, this, channel);
+            if (ctx != null) {
+                for (Controllable controllable : Controllable.FILE_SYSTEM.getEntries()) {
+                    if (controllable instanceof DeviceGroup) {
+                        if (((DeviceGroup) controllable).getRawDevices().contains(name)) {
+                            ChannelValue cValue = controllable.getValue(channel);
+                            ctx.writeAndFlush(new TextWebSocketFrame(controllable.displayName() + ":" + channel.displayName() + ":" + cValue.isSave() + ":" + cValue.getValue()));
+                        }
                     }
                 }
             }
