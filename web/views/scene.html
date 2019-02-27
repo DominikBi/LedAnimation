@@ -13,7 +13,7 @@
     <tr>
         <th scope="row">$name$</th>
         <td>
-            <a role="button" type="button" href="/scenes/play?name=$name$" class="btn btn-success"> <i class="fa fa-play"></i></a>
+            <a role="button" type="button" href="/scenes/play?name=$name$" class="btn btn-success play-button"> <i class="fa fa-play"></i></a>
             <a role="button" type="button" class="btn btn-$visible-status$" href="/scenes/visible?name=$name$"><i class="fa fa-eye$eye$"></i></a>
             <a role="button" type="button" class="btn btn-danger" href="/scenes/delete?name=$name$"><i class="fa fa-trash"></i></a>
         </td>
@@ -36,4 +36,15 @@
     $(document).ready(function() {
         $('#scenes').DataTable();
     } );
+    $(".play-button").each(function(){
+        $(this).on('click', function(e) {
+            e.preventDefault();
+            $.ajax({
+                url: $(this).attr("href"),
+                type: 'get'
+            }).fail(function() {
+                alertify.error("Failed to play scene");
+            });
+        });
+    });
 </script>

@@ -33,9 +33,8 @@ public class SceneHandler {
     }
 
     @Mapping(value = "scenes/play")
-    public void play(@RequiredGet(value = "name") String name, Request request, Response response){
+    public void play(@RequiredGet(value = "name") String name){
         Scene.FILE_SYSTEM.getEntry(name).load();
-        response.redirect(request.getGet().containsKey("fromlive") ? "/live" : "/scene", false);
     }
 
     @Mapping(value = "scenes/create")

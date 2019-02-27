@@ -61,7 +61,6 @@ public class DeviceHandler  {
     public void setVisible(@RequiredGet(value = "name") String name, Response response){
         Controllable controllable = Controllable.FILE_SYSTEM.getEntry(name);
         controllable.setVisible(!controllable.isVisible());
-        //System.out.println("set visible of " + name + " " + controllable.displayName() + " " + controllable.isVisible());
         Controllable.FILE_SYSTEM.putEntry(name, controllable);
         response.redirect("/device", false);
     }
@@ -80,7 +79,6 @@ public class DeviceHandler  {
 
             List<Device> selectable = new ArrayList<>();
             for (Controllable cont : Controllable.FILE_SYSTEM.getEntries()) {
-                System.out.println(cont + " " + group + " " + group.getDevices());
                 if (cont instanceof Device && !group.getRawDevices().contains(cont.displayName())) {
                     selectable.add((Device) cont);
                 }

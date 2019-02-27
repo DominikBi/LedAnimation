@@ -43,7 +43,6 @@ public class WebSocketHandler extends SimpleChannelInboundHandler<WebSocketFrame
     }
 
     public void updateValue(ChannelHandlerContext ctx, Controllable device, ChannelType channel) {
-        System.out.println(ctx);
         ChannelValue value = device.getValue(channel);
         channels.writeAndFlush(new TextWebSocketFrame(device.displayName() + ":" + channel.displayName() + ":" + value.isSave() + ":" + value.getValue()),
                 ctx == null ? ChannelMatchers.all() : ChannelMatchers.isNot(ctx.channel()));

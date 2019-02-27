@@ -5,7 +5,7 @@
 <div class="btn-toolbar mb-3" role="toolbar" aria-label="Toolbar with button groups">
     <form method="get" action="/liveaction/togglemute" id="togglemute"></form>
     $@form_scene$
-        <form method="get" action="/scenes/play" id="sc_$name$"></form>
+        <form method="get" action="/scenes/play" class="scene-form" id="sc_$name$"></form>
     $@@$
     <div class="btn-group mr-2" role="group" aria-label="First group">
         <button type="button" class="btn btn-secondary" id="toggle-drag-and-drop"><i class="fa fa-arrows-alt"></i></button>
@@ -21,7 +21,7 @@
                 <div class="input-group-prepend">
                     <div class="input-group-text" id="btnGroupAddon">Master</div>
                 </div>
-                <input id="master" name="value" type="range" value="$master$" class="form-control" placeholder="Master value" aria-label="Input group example" aria-describedby="btnGroupAddon">
+                <input id="master" name="value" type="range" value="$master$" class="form-control custom-range" placeholder="Master value" aria-label="Input group example" aria-describedby="btnGroupAddon">
         </div>
     </form>
 </div>
@@ -37,7 +37,7 @@ $@devices$
         <div>
         $@control$
             <form method="get" action="/liveaction/setvalue" class="valueform">
-                <input type="range" class="form-control valuerange $device$-$channel$" max="255" value="$value$" name="value">
+                <input type="range" class="custom-range valuerange $device$-$channel$" max="255" value="$value$" name="value">
                 <input value="$channel$" name="channel" type="hidden">
                 <input value="$device$" name="device" type="hidden">
                 <span class="text-$save$">$channel$</span>
@@ -51,6 +51,7 @@ $@@$
 <script src="/static/3party/sortable.js"></script>
 <script src="/static/3party/cookies.js"></script>
 <script>
+
 function send(message) {
     if (!window.WebSocket) { return; }
     if (socket.readyState == WebSocket.OPEN) {
@@ -77,10 +78,34 @@ $("#master").on('input', function() {
         url : this.form.action,
         type: this.form.method,
         data: $(this.form).serialize()
+    }).fail(function() {
+        alertify.error("Failed to set master");
+    });;
+});
+$(".scene-form").each(function(){
+    $(this).on('submit', function(e) {
+        e.preventDefault();
+        $.ajax({
+            url : this.action,
+            type: this.method,
+            data: $(this).serialize()
+        }).fail(function() {
+            alertify.error("Failed to play scene");
+        });
     });
 });
+var timeout = false;
 $('.valuerange').each(function(){
     $(this).on('input', function() {
+        if ($("#master").val() < 3) {
+            if (!timeout) {
+                alertify.warning("Master is off");
+                timeout = true;
+                setTimeout(function() {
+                    timeout = false;
+                }, 800);
+            }
+        }
         send($(this.form).serialize());
     });
 });
@@ -127,7 +152,9 @@ var sortable = new Sortable(document.getElementById('live-devices'), {
             url : "/liveaction/updatePrio",
             type: "get",
             data: request
-        });
+        }).fail(function() {
+            alertify.error("Failed to update prio");
+        });;
 	}
 });
 function is_touch_device() {
@@ -146,7 +173,6 @@ function is_touch_device() {
   return mq(query);
 }
 $('.scene-play').each(function(){
-    console
     if (is_touch_device()) {
         $(this).on('dblclick', function() {
             $(this.form).submit();
@@ -197,10 +223,10 @@ if (window.WebSocket) {
 
     }
     socket.onclose = function(event) {
-        alert("WebSocket closed...");
+         alertify.error("Connection closed");
     }
     socket.onopen = function(event) {
-        console.log("open");
+        alertify.success("Connected");
         send("register");
     }
 } else {

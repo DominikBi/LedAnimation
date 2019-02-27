@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="/static/3party/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="/static/3party/datatable.css">
     <link rel="stylesheet" href="/static/3party/datatable_bootstrap.css">
+    <link rel="stylesheet" href="/static/3party/notify.css">
 </head>
 <body class="text-center">
     <nav class="navbar navbar-expand-md navbar-dark bg-dark sticky-top">
@@ -39,11 +40,14 @@
     <script src="/static/3party/jquery.js"></script>
     <script src="/static/3party/popper.js"></script>
     <script src="/static/3party/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/static/3party/notify.js"></script>
     <script src="/static/3party/datatables.js"></script>
     <script src="/static/3party/datatable_bootstrap.js"></script>
     <script type="text/javascript">
         var url = "$url$";
+
         $(document).ready(function(){
+            alertify.set('notifier','position', 'bottom-right');
             $.get(url, function( data ) {
                 $("#main").html(data);
             });
