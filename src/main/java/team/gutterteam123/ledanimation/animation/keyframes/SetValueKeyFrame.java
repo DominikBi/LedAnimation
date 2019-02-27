@@ -22,6 +22,6 @@ public class SetValueKeyFrame extends KeyFrame {
     public void step(ExecutionContext context) {
         Controllable device = context.getData(DEVICE);
         short stepSize = (short) ((value - device.getValue(channel).getValue()) / (end - start));
-        device.setChannel(channel, (short) (stepSize * context.position()));
+        device.setChannel(null, channel, (short) (stepSize * context.position()));
     }
 }

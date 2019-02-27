@@ -1,7 +1,6 @@
 package team.gutterteam123.ledanimation.handlers;
 
 import io.github.splotycode.mosaik.util.Pair;
-import io.github.splotycode.mosaik.util.prettyprint.PrettyPrint;
 import io.github.splotycode.mosaik.webapi.handler.anotation.check.Mapping;
 import io.github.splotycode.mosaik.webapi.handler.anotation.handle.RequiredGet;
 import io.github.splotycode.mosaik.webapi.request.Request;
@@ -9,7 +8,8 @@ import io.github.splotycode.mosaik.webapi.response.Response;
 import io.github.splotycode.mosaik.webapi.response.content.ResponseContent;
 import io.github.splotycode.mosaik.webapi.response.content.file.FileResponseContent;
 import io.github.splotycode.mosaik.webapi.response.content.manipulate.pattern.PatternCommand;
-import team.gutterteam123.ledanimation.LedAnimation;
+import io.github.splotycode.mosaik.webapi.server.netty.NettyRequest;
+import io.netty.channel.ChannelHandlerContext;
 import team.gutterteam123.ledanimation.devices.*;
 
 import java.io.File;
@@ -50,10 +50,14 @@ public class LiveHandler {
         return content;
     }
 
+    @Deprecated
     @Mapping("liveaction/setvalue")
-    public void setValue(@RequiredGet("device") String deviceName, @RequiredGet("channel") String channel, @RequiredGet("value") short value) {
+    public void setValue(Request request, @RequiredGet("device") String deviceName, @RequiredGet("channel") String channel, @RequiredGet("value") short value) {
         Controllable device = Controllable.FILE_SYSTEM.getEntry(deviceName);
-        device.setChannel(ChannelType.fromDisplayName(channel), value);
+        ChannelHandlerContext ctx = request.getDataFactory().getData(NettyRequest.CTX_KEY);
+        ChannelType type = ChannelType.fromDisplayName(channel);
+
+        device.setChannel(ctx, type, value);
     }
 
     @Mapping("liveaction/updatePrio")
@@ -68,11 +72,13 @@ public class LiveHandler {
     }
 
     @Mapping("liveaction/setrgb")
-    public void setRGB(@RequiredGet("device") String deviceName, @RequiredGet("r") short r, @RequiredGet("g") short g, @RequiredGet("b") short b) {
+    public void setRGB(Request request, @RequiredGet("device") String deviceName, @RequiredGet("r") short r, @RequiredGet("g") short g, @RequiredGet("b") short b) {
         Controllable device = Controllable.FILE_SYSTEM.getEntry(deviceName);
-        device.setChannel(ChannelType.COLOR_RED, r);
-        device.setChannel(ChannelType.COLOR_GREEN, g);
-        device.setChannel(ChannelType.COLOR_BLUE, b);
+        ChannelHandlerContext ctx = request.getDataFactory().getData(NettyRequest.CTX_KEY);
+
+        device.setChannel(ctx, ChannelType.COLOR_RED, r);
+        device.setChannel(ctx, ChannelType.COLOR_GREEN, g);
+        device.setChannel(ctx, ChannelType.COLOR_BLUE, b);
     }
 
     @Mapping("liveaction/setmaster")

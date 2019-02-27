@@ -22,6 +22,6 @@ public class ChannelInitializer extends NettyChannelInitializer {
         pipeline.addLast(new WebSocketServerCompressionHandler());
         pipeline.addLast(new WebSocketServerProtocolHandler("/websocket", null, true));
         pipeline.addLast("handler", webServer.getHandler());
-        pipeline.addLast(new WebSocketHandler());
+        pipeline.addLast(WebSocketHandler.getInstance());
     }
 }

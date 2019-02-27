@@ -37,7 +37,7 @@ $@devices$
         <div>
         $@control$
             <form method="get" action="/liveaction/setvalue" class="valueform">
-                <input type="range" class="form-control valuerange" max="255" value="$value$" name="value">
+                <input type="range" class="form-control valuerange $device$-$channel$" max="255" value="$value$" name="value">
                 <input value="$channel$" name="channel" type="hidden">
                 <input value="$device$" name="device" type="hidden">
                 <span class="text-$save$">$channel$</span>
@@ -51,6 +51,14 @@ $@@$
 <script src="/static/3party/sortable.js"></script>
 <script src="/static/3party/cookies.js"></script>
 <script>
+function send(message) {
+    if (!window.WebSocket) { return; }
+    if (socket.readyState == WebSocket.OPEN) {
+        socket.send(message);
+    } else {
+        alert("WebSocket is closed");
+    }
+}
 devices = $(".device");
 devices.sort(function (a, b) {
       var contentA =parseInt( $(a).attr('data-prio'));
@@ -73,11 +81,7 @@ $("#master").on('input', function() {
 });
 $('.valuerange').each(function(){
     $(this).on('input', function() {
-        $.ajax({
-            url : this.form.action,
-            type: this.form.method,
-            data: $(this.form).serialize()
-        });
+        send($(this.form).serialize());
     });
 });
 $('.color-select').each(function(){
@@ -177,6 +181,20 @@ if (window.WebSocket) {
     socket = new WebSocket("ws://" + host + "/websocket");
     socket.onmessage = function(event) {
         console.log(event.data);
+        var split = event.data.split(":");
+
+        var element = $("." + split[0] + "-" + split[1]).parent().find("span");
+        if (split[2] == "true") {
+            element.addClass("text-info");
+            element.removeClass("text-warning");
+        } else {
+            element.removeClass("text-info");
+            element.addClass("text-warning");
+        }
+        if (split.length == 4) {
+            document.getElementsByClassName(split[0] + "-" + split[1])[0].value = parseInt(split[3]);
+        }
+
     }
     socket.onclose = function(event) {
         alert("WebSocket closed...");
@@ -187,13 +205,5 @@ if (window.WebSocket) {
     }
 } else {
     alert("Your browser does not support web sockets: Live update will be disabled");
-}
-function send(message) {
-    if (!window.WebSocket) { return; }
-    if (socket.readyState == WebSocket.OPEN) {
-        socket.send(message);
-    } else {
-        alert("WebSocket is closed");
-    }
 }
 </script>

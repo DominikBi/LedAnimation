@@ -1,9 +1,12 @@
 package team.gutterteam123.ledanimation.devices;
 
 import io.github.splotycode.mosaik.domparsing.annotation.EntryListener;
+import io.netty.channel.ChannelHandlerContext;
+import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import lombok.Getter;
 import lombok.Setter;
 import team.gutterteam123.ledanimation.LedAnimation;
+import team.gutterteam123.ledanimation.server.WebSocketHandler;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -33,12 +36,14 @@ public class DeviceGroup implements Controllable, EntryListener {
     }
 
     @Override
-    public void setChannel(ChannelType channel, short value) {
+    public void setChannel(ChannelHandlerContext ctx, ChannelType channel, short value) {
         for (Device child : devices) {
             if (child.supportsOperation(channel)) {
-                child.setChannel(channel, value);
+                child.setChannel(null, channel, value);
             }
         }
+        WebSocketHandler.getInstance().updateValue(ctx, this, channel);
+        ctx.writeAndFlush(new TextWebSocketFrame(displayName() + ":" + channel.displayName() + ":" + true));
     }
 
     public void registerDevice(Device device) {

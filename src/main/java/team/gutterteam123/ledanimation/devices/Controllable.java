@@ -6,6 +6,7 @@ import io.github.splotycode.mosaik.domparsing.annotation.parsing.SerialisedEntry
 import io.github.splotycode.mosaik.runtime.LinkBase;
 import io.github.splotycode.mosaik.runtime.Links;
 import io.github.splotycode.mosaik.webapi.response.content.manipulate.HandleAsField;
+import io.netty.channel.ChannelHandlerContext;
 
 import java.io.Serializable;
 import java.util.Collection;
@@ -15,7 +16,7 @@ public interface Controllable extends Serializable, Comparable<Controllable> {
 
     FileSystem<Controllable> FILE_SYSTEM = LinkBase.getInstance().getLink(Links.PARSING_FILEPROVIDER).provide("controllables", new SerialisedEntryParser());
 
-    void setChannel(ChannelType channel, short value);
+    void setChannel(ChannelHandlerContext ctx, ChannelType channel, short value);
 
     Collection<ChannelType> getChannels();
 

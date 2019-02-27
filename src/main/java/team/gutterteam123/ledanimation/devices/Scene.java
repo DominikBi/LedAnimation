@@ -32,7 +32,7 @@ public class Scene implements Serializable  {
         for (Map.Entry<String, Map<ChannelType, Short>> device : values.entrySet()) {
             Controllable dev = Controllable.FILE_SYSTEM.getEntry(device.getKey());
             for (Map.Entry<ChannelType, Short> channel : device.getValue().entrySet()) {
-                dev.setChannel(channel.getKey(), channel.getValue());
+                dev.setChannel(null, channel.getKey(), channel.getValue());
             }
         }
     }
