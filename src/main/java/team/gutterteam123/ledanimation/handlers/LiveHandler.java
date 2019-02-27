@@ -1,6 +1,7 @@
 package team.gutterteam123.ledanimation.handlers;
 
 import io.github.splotycode.mosaik.util.Pair;
+import io.github.splotycode.mosaik.util.prettyprint.PrettyPrint;
 import io.github.splotycode.mosaik.webapi.handler.anotation.check.Mapping;
 import io.github.splotycode.mosaik.webapi.handler.anotation.handle.RequiredGet;
 import io.github.splotycode.mosaik.webapi.request.Request;
@@ -17,8 +18,9 @@ import java.util.stream.Collectors;
 public class LiveHandler {
 
     @Mapping(value = "views/live")
-    public ResponseContent view() {
+    public ResponseContent view(Request request) {
         FileResponseContent content = new FileResponseContent(new File("web/views/live.html"));
+        content.manipulate().variable("host", request.getHeader("Host"));
         content.manipulate().variable("master", LedHandler.getInstance().getMaster());
         content.manipulate().variable("mute_status", LedHandler.getInstance().isMute() ? "danger" : "secondary");
         content.manipulate().variable("mute_icon", LedHandler.getInstance().isMute() ? "power-off" : "lightbulb");

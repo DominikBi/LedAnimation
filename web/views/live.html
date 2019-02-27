@@ -37,7 +37,7 @@ $@devices$
         <div>
         $@control$
             <form method="get" action="/liveaction/setvalue" class="valueform">
-                <input type="range" class="form-control-range valuerange" max="255" value="$value$" name="value">
+                <input type="range" class="form-control valuerange" max="255" value="$value$" name="value">
                 <input value="$channel$" name="channel" type="hidden">
                 <input value="$device$" name="device" type="hidden">
                 <span class="text-$save$">$channel$</span>
@@ -58,6 +58,8 @@ devices.sort(function (a, b) {
     return contentA - contentB;
 });
 $("#live-devices").html(devices);
+
+var host = "$host$";
 
 $(function () {
   $('[data-toggle="tooltip"]').tooltip();
@@ -165,4 +167,33 @@ $("#toggle-drag-and-drop").on("click", function() {
     $("#toggle-drag-and-drop").toggleClass("btn-danger");
     sortable.option("disabled", !sortable.option("disabled"));
 });
+
+//websocket address
+var socket;
+if (!window.WebSocket) {
+  window.WebSocket = window.MozWebSocket;
+}
+if (window.WebSocket) {
+    socket = new WebSocket("ws://" + host + "/websocket");
+    socket.onmessage = function(event) {
+        console.log(event.data);
+    }
+    socket.onclose = function(event) {
+        alert("WebSocket closed...");
+    }
+    socket.onopen = function(event) {
+        console.log("open");
+        send("register");
+    }
+} else {
+    alert("Your browser does not support web sockets: Live update will be disabled");
+}
+function send(message) {
+    if (!window.WebSocket) { return; }
+    if (socket.readyState == WebSocket.OPEN) {
+        socket.send(message);
+    } else {
+        alert("WebSocket is closed");
+    }
+}
 </script>
