@@ -9,8 +9,13 @@ import io.github.splotycode.mosaik.webapi.response.content.manipulate.Manipulate
 import io.github.splotycode.mosaik.webapi.response.content.string.StaticStringContent;
 import team.gutterteam123.ledanimation.animation.Animation;
 import team.gutterteam123.ledanimation.animation.AnimationExecutor;
+import team.gutterteam123.ledanimation.animation.keyframes.KeyFrame;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Map;
+import java.util.Set;
 
 public class AnimationHandler {
 
@@ -39,12 +44,38 @@ public class AnimationHandler {
     public ResponseContent edit(@RequiredGet(value = "name") String name) {
         ManipulateableContent content = new FileResponseContent("web/editanimation.html");
         content.manipulate().variable("name", name);
+        Animation a = Animation.FILE_SYSTEM.getEntry(name);
+        content.manipulate().variable("End",a.getEnd());
+        content.manipulate().variable("fps",a.getFps());
         return content;
     }
 
     //TODO
     @Mapping(value = "animations/save")
-    public void save(Response response, @RequiredGet(value = "name") String name) {
+    public void save(Response response, @RequiredGet(value = "name") String name, @RequiredGet(value="Animation")String animation) {
+        String s = "";
+        int counter = 0;
+        for(int i = 0; i < animation.length();i++){
+            if('/' != animation.charAt(i)){
+                s += animation.charAt(i);
+            }
+            else {
+                counter++;
+                if(counter == 1) {
+                    int fps = Integer.parseInt(s).;
+                    s = "";
+                }
+                else if(counter == 2){
+                    int end = Integer.parseInt(s);
+                    s = "";
+                }
+                else if(counter == 3){
+                    splitBy(s,',');
+                }
+            }
+        }
+        Animation a;
+        Animation.FILE_SYSTEM.putEntry(name, animation);
         response.redirect("/animation" + name, false);
     }
 
@@ -53,4 +84,18 @@ public class AnimationHandler {
         Animation.FILE_SYSTEM.deleteEntry(name);
         response.redirect("/animation" + name, false);
     }
-}
+    private ArrayList splitBy(String s, char c){
+        ArrayList<String> al = new ArrayList<>();
+        String part = "";
+        for(int i = 0; i < s.length();i++){
+            if (s.charAt(i) != c) {
+                part += s.charAt(i);
+
+
+            }
+            else {
+                al.add(part);
+            }
+        }
+        return al;
+    }
