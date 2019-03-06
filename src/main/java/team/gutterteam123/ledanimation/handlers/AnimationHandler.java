@@ -7,11 +7,18 @@ import io.github.splotycode.mosaik.webapi.response.content.ResponseContent;
 import io.github.splotycode.mosaik.webapi.response.content.file.FileResponseContent;
 import io.github.splotycode.mosaik.webapi.response.content.manipulate.ManipulateableContent;
 import io.github.splotycode.mosaik.webapi.response.content.string.StaticStringContent;
+import jdk.nashorn.internal.parser.JSONParser;
+import org.json.JSONObject;
+import sun.misc.IOUtils;
 import team.gutterteam123.ledanimation.animation.Animation;
 import team.gutterteam123.ledanimation.animation.AnimationExecutor;
 import team.gutterteam123.ledanimation.animation.keyframes.KeyFrame;
 
 import java.io.File;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.*;
 
 public class AnimationHandler {
@@ -49,27 +56,10 @@ public class AnimationHandler {
 
     //TODO
     @Mapping(value = "animations/save")
-    public void save(Response response, @RequiredGet(value = "name") String name, @RequiredGet(value = "Animation") String animation) {
-        String s = "";
-        int counter = 0;
-        for (int i = 0; i < animation.length(); i++) {
-            if ('/' != animation.charAt(i)) {
-                s += animation.charAt(i);
-            } else {
-                counter++;
-                if (counter == 1) {
-                    int fps = Integer.parseInt(s).;
-                    s = "";
-                } else if (counter == 2) {
-                    int end = Integer.parseInt(s);
-                    s = "";
-                } else if (counter == 3) {
-                    splitBy(s, ',');
-                }
-            }
-        }
-        Animation a;
-        Animation.FILE_SYSTEM.putEntry(name, animation);
+    public void save(Response response, @RequiredGet(value = "name") String name) throws IOException {
+        URL url = new URL("http://localhost:5555/");
+        JSONObject jsonObject =  new JSONObject(url.toString());
+
         response.redirect("/animation" + name, false);
     }
 
@@ -77,40 +67,5 @@ public class AnimationHandler {
     public void delete(Response response, @RequiredGet(value = "name") String name) {
         Animation.FILE_SYSTEM.deleteEntry(name);
         response.redirect("/animation" + name, false);
-    }
-
-    private ArrayList splitBy(String s, char c) {
-        ArrayList<String> al = new ArrayList<>();
-        String part = "";
-        for (int i = 0; i < s.length(); i++) {
-            if (s.charAt(i) != c) {
-                part += s.charAt(i);
-
-
-            } else {
-                al.add(part);
-            }
-        }
-        return al;
-    }
-    private Map splitBy(String s, char totalSplit,char itemSplit){
-        Map<String,KeyFrame> map = new HashMap<>();
-        String string = "";
-        KeyFrame keyframe = "";
-        for(int i = 0; i< s.length();i++){
-            if(s.charAt(i) != totalSplit){
-                if (s.charAt(i) != itemSplit) {
-                    string += s.charAt(i);
-                } else {
-                    while(s.charAt(i) != totalSplit){
-                        keyframe += s.charAt(i);
-                        i++;
-                    }
-                map.put(string, keyframe);
-                }
-
-
-            }
-        }
     }
 }
