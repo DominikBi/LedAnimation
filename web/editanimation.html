@@ -45,8 +45,8 @@
     <tbody>
      <tr>
          <th scope="row"><input id="color" content="Color"></th>
-         <td><input id="End"></td>
-         <td><input id="Length"></td>
+         <td><input id="end"></td>
+         <td><input id="length"></td>
      </tr>
     </tbody>
 </table>
@@ -93,21 +93,7 @@
     return false;
 }
 
-var canvas = document.getElementById("canvas");
-var fillColor = document.getElementById("color").value;
-canvas.id = "canvas";
-canvas.width = "600";
-canvas.height = "200";
-canvas.style.border = "10px solid";
-canvas.style.borderColor = "#2e3135";
-var ctx = canvas.getContext("2d");
-function draw(){
-ctx.strokeStyle = colourNameToHex(fillColor);
-var x = Math.floor(Math.random()*500 +50)
-ctx.beginPath();
-ctx.moveTo(50,x);
-ctx.lineTo(150,x);
-ctx.stroke();
+
 }
 
 
@@ -116,8 +102,16 @@ ctx.stroke();
 
 </script>
 <script>
-    var s = document.getElementById("a");
-    JSON.parse(s,"End")
+    var color = document.getElementById("color");
+    var end = document.getElementById("end");
+    var fps = document.getElementById("fps");
+    var AnimationInfo = { "color" : color, "end" : end,"fps" : fps    }
+    var Animation = JSON.stringify(AnimationInfo);
+    var x = new XMLHttpRequest();
+
+    x.open("GET", "localhost:5555/animations/save");
+    x.send();
+    var obj = {}
 </script>
 </body>
 </html>
