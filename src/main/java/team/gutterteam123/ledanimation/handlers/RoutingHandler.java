@@ -1,6 +1,5 @@
 package team.gutterteam123.ledanimation.handlers;
 
-import io.github.splotycode.mosaik.util.Pair;
 import io.github.splotycode.mosaik.util.StringUtil;
 import io.github.splotycode.mosaik.util.io.PathUtil;
 import io.github.splotycode.mosaik.webapi.handler.HttpHandler;
