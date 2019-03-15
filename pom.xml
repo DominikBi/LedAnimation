@@ -40,6 +40,11 @@
             <artifactId>json</artifactId>
             <version>20180813</version>
         </dependency>
+        <dependency>
+            <groupId>io.github.splotycode.mosaik</groupId>
+            <artifactId>Mosaik-All</artifactId>
+            <version>2.2.8-PreRelease</version>
+        </dependency>
 
     </dependencies>
 

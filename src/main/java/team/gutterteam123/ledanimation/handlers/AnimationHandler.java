@@ -7,10 +7,20 @@ import io.github.splotycode.mosaik.webapi.response.content.ResponseContent;
 import io.github.splotycode.mosaik.webapi.response.content.file.FileResponseContent;
 import io.github.splotycode.mosaik.webapi.response.content.manipulate.ManipulateableContent;
 import io.github.splotycode.mosaik.webapi.response.content.string.StaticStringContent;
+import jdk.nashorn.internal.parser.JSONParser;
+import org.json.JSONObject;
+import sun.misc.IOUtils;
 import team.gutterteam123.ledanimation.animation.Animation;
 import team.gutterteam123.ledanimation.animation.AnimationExecutor;
+import team.gutterteam123.ledanimation.animation.keyframes.KeyFrame;
+import team.gutterteam123.ledanimation.devices.Controllable;
 
 import java.io.File;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
+import java.util.*;
 
 public class AnimationHandler {
 
@@ -29,7 +39,7 @@ public class AnimationHandler {
     }
 
     @Mapping(value = "animations/play")
-    public void play(Response response, @RequiredGet(value = "name") String name){
+    public void play(Response response, @RequiredGet(value = "name") String name) {
         AnimationExecutor.getInstance().execute(Animation.FILE_SYSTEM.getEntry(name));
         response.redirect("/animation" + name, false);
     }
@@ -39,17 +49,29 @@ public class AnimationHandler {
     public ResponseContent edit(@RequiredGet(value = "name") String name) {
         ManipulateableContent content = new FileResponseContent("web/editanimation.html");
         content.manipulate().variable("name", name);
+        Animation a = Animation.FILE_SYSTEM.getEntry(name);
+        content.manipulate().variable("End", a.getEnd());
+        content.manipulate().variable("fps", a.getFps());
         return content;
     }
 
     //TODO
     @Mapping(value = "animations/save")
-    public void save(Response response, @RequiredGet(value = "name") String name) {
+    public void save(Response response){
+        JSONObject jsonObject = new JSONObject();
+        String color = jsonObject.getJSONObject("Animation").getString("color");
+        int fps = jsonObject.getJSONObject("Animation").getInt("fps");
+        int end = jsonObject.getJSONObject("Animation").getInt("end");
+        String name = jsonObject.getJSONObject("Animation").getString("name");
+        Animation animation = new Animation(name);
+        animation.setFps(fps);
+        animation.setEnd(end);
+        Animation.FILE_SYSTEM.putEntry(name,animation);
         response.redirect("/animation" + name, false);
     }
 
     @Mapping(value = "animations/delete")
-    public void delete(Response response, @RequiredGet(value = "name") String name){
+    public void delete(Response response, @RequiredGet(value = "name") String name) {
         Animation.FILE_SYSTEM.deleteEntry(name);
         response.redirect("/animation" + name, false);
     }
