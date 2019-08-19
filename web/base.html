@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>$site$ | LedAnimation</title>
+    <title>LedAnimation</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="/static/3party/fa/css/all.css">
     <link rel="stylesheet" href="/static/3party/bootstrap/css/bootstrap.min.css">
@@ -13,25 +13,39 @@
 <body class="text-center">
     <nav class="navbar navbar-expand-md navbar-dark bg-dark sticky-top">
         <a class="navbar-brand" href="/">LedAnimation</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
 
-        <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+        <div class="collapse navbar-collapse" id="navbar">
             <ul class="navbar-nav mr-auto">
-                <li class="nav-item $device$">
-                    <a class="nav-link" href="/device">Devices</a>
+                <li class="nav-item device">
+                    <a class="nav-link" href="/device" onclick="return onNav('device');">Devices</a>
                 </li>
-                <li class="nav-item $live$">
-                    <a class="nav-link" href="/live">Live</a>
+                <li class="nav-item live">
+                    <a class="nav-link" href="/live" onclick="return onNav('live');">Live</a>
                 </li>
-                <li class="nav-item $animation$">
-                    <a class="nav-link" href="/animation">Animation</a>
+                <li class="nav-item animation">
+                    <a class="nav-link" href="/animation" onclick="return onNav('animation');">Animation</a>
                 </li>
-                <li class="nav-item $scene$">
-                    <a class="nav-link" href="/scene">Scenes</a>
+                <li class="nav-item scene">
+                    <a class="nav-link" href="/scene" onclick="return onNav('scene');">Scenes</a>
+                </li>
+                <li class="nav-item user">
+                    <a class="nav-link" href="/scene" onclick="return onNav('user');">Users</a>
                 </li>
             </ul>
+            <div class="nav navbar-right">
+                <div class="dropdown">
+                    <button class="btn btn-secondary btn-sm dropdown-toggle" id="profile" data-toggle="dropdown" aria-haspopup="true"
+                       aria-expanded="false">
+                        $user$
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="profile">
+                        <a class="dropdown-item" href="/logout">Log Out</a>
+                    </div>
+                </div>
+            </div>
         </div>
     </nav>
     <main id="main" role="main" class="container">
@@ -45,13 +59,35 @@
     <script src="/static/3party/datatable_bootstrap.js"></script>
     <script src="/static/util.js"></script>
     <script type="text/javascript">
-        var url = "$url$";
+        function loadPage(url) {
+            console.log("Loading Page " + url);
+            window.document.title = url.charAt(0).toUpperCase() + url.slice(1) + " | LedAnimation";
+            history.pushState({current_page:url, previous_page:window.location.href.split('/').pop()}, window.document.title, url);
+            $(".navbar-nav li").removeClass("active");
+            $("." + url).addClass("active");
+            $.ajax({
+              cache: false,
+              url: "/views/" + url,
+              success:function(response){
+                if (response.includes("<title>Login</title>")) {
+                    window.location.reload(true);
+                } else {
+                    $("#main").html(response);
+                }
+              },
+              error: function(xhr, textStatus, errorThrown){
+                window.location.reload(true);
+              }
+            });
+        }
+        function onNav(url) {
+            loadPage(url);
+            return false;
+        }
 
         $(document).ready(function(){
             alertify.set('notifier','position', 'bottom-right');
-            $.get(url, function( data ) {
-                $("#main").html(data);
-            });
+            loadPage(window.location.href.split('/').pop());
         });
     </script>
 </body>

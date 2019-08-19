@@ -6,7 +6,7 @@ import lombok.Getter;
 
 public enum ChannelType {
 
-    COLOR_RED(true), COLOR_BLUE(true), COLOR_GREEN(true), BRIGHTNESS, PAN, TILT, STROBE, GLOBO, GLOBO_SPEED;
+    COLOR_RED(true), COLOR_BLUE(true), COLOR_GREEN(true), BRIGHTNESS, PAN, TILT, STROBE, GLOBO, GLOBO_SPEED, ZOOM;
 
     ChannelType() {
         this(false);

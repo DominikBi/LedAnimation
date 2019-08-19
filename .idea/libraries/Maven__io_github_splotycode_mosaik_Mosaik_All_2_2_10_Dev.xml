@@ -1,0 +1,35 @@
+<component name="libraryTable">
+  <library name="Maven: io.github.splotycode.mosaik:Mosaik-All:2.2.10-Dev">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/io/github/splotycode/mosaik/Mosaik-All/2.2.10-Dev/Mosaik-All-2.2.10-Dev.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/io/github/splotycode/mosaik/Mosaik-All/2.2.10-Dev/Mosaik-All-2.2.10-Dev-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/io/github/splotycode/mosaik/Mosaik-All/2.2.10-Dev/Mosaik-All-2.2.10-Dev-sources.jar!/" />
+      <root url="file://$PROJECT_DIR$/../Mosaik/AnnotationProcessing/src/main/java" />
+      <root url="file://$PROJECT_DIR$/../Mosaik/Annotations/src/main/java" />
+      <root url="file://$PROJECT_DIR$/../Mosaik/ArgParser-Impl/src/main/java" />
+      <root url="file://$PROJECT_DIR$/../Mosaik/ArgParser-Impl/src/test/java" />
+      <root url="file://$PROJECT_DIR$/../Mosaik/ArgParser/src/main/java" />
+      <root url="file://$PROJECT_DIR$/../Mosaik/Automatisation/src/main/java" />
+      <root url="file://$PROJECT_DIR$/../Mosaik/Console/src/main/java" />
+      <root url="file://$PROJECT_DIR$/../Mosaik/Database/src/main/java" />
+      <root url="file://$PROJECT_DIR$/../Mosaik/Database/src/test/java" />
+      <root url="file://$PROJECT_DIR$/../Mosaik/DomParsing-Impl/src/main/java" />
+      <root url="file://$PROJECT_DIR$/../Mosaik/DomParsing/src/main/java" />
+      <root url="file://$PROJECT_DIR$/../Mosaik/IUI/src/main/java" />
+      <root url="file://$PROJECT_DIR$/../Mosaik/Networking-Web/src/main/java" />
+      <root url="file://$PROJECT_DIR$/../Mosaik/Networking/src/main/java" />
+      <root url="file://$PROJECT_DIR$/../Mosaik/Networking/src/test/java" />
+      <root url="file://$PROJECT_DIR$/../Mosaik/Runtime/src/main/java" />
+      <root url="file://$PROJECT_DIR$/../Mosaik/StartUp/src/main/java" />
+      <root url="file://$PROJECT_DIR$/../Mosaik/Util/src/main/java" />
+      <root url="file://$PROJECT_DIR$/../Mosaik/Util/src/test/java" />
+      <root url="file://$PROJECT_DIR$/../Mosaik/ValueTransformer/src/main/java" />
+      <root url="file://$PROJECT_DIR$/../Mosaik/WebApi/src/main/java" />
+      <root url="file://$PROJECT_DIR$/../Mosaik/WebApi/src/test/java" />
+    </SOURCES>
+  </library>
+</component>

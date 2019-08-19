@@ -14,7 +14,6 @@ public class NeoPixelStartup implements StartupTask {
     @Override
     public void execute(StartUpEnvironmentChanger ec) throws Exception {
         LinkBase.getBootContext().applyArgs(this);
-        System.out.println(neo);
         if (neo) {
             ec.stopApplicationStart(LedAnimation.class);
         } else {

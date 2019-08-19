@@ -23,12 +23,12 @@
         <dependency>
             <groupId>io.github.splotycode.mosaik</groupId>
             <artifactId>Mosaik-All</artifactId>
-            <version>2.2.8-PreRelease</version>
+            <version>2.3-Dev</version>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.18.4</version>
+            <version>1.18.8</version>
         </dependency>
         <dependency>
             <groupId>com.google.protobuf</groupId>
@@ -39,11 +39,6 @@
             <groupId>org.json</groupId>
             <artifactId>json</artifactId>
             <version>20180813</version>
-        </dependency>
-        <dependency>
-            <groupId>io.github.splotycode.mosaik</groupId>
-            <artifactId>Mosaik-All</artifactId>
-            <version>2.2.8-PreRelease</version>
         </dependency>
 
     </dependencies>

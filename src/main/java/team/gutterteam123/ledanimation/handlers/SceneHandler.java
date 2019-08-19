@@ -2,6 +2,7 @@ package team.gutterteam123.ledanimation.handlers;
 
 import io.github.splotycode.mosaik.util.Pair;
 import io.github.splotycode.mosaik.webapi.handler.anotation.check.Mapping;
+import io.github.splotycode.mosaik.webapi.handler.anotation.check.NeedPermission;
 import io.github.splotycode.mosaik.webapi.handler.anotation.handle.RequiredGet;
 import io.github.splotycode.mosaik.webapi.request.Request;
 import io.github.splotycode.mosaik.webapi.response.Response;
@@ -13,6 +14,7 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
+@NeedPermission
 public class SceneHandler {
 
     @Mapping(value = "views/scene")

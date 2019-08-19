@@ -2,8 +2,10 @@ package team.gutterteam123.ledanimation.handlers;
 
 import io.github.splotycode.mosaik.util.Pair;
 import io.github.splotycode.mosaik.webapi.handler.anotation.check.Mapping;
+import io.github.splotycode.mosaik.webapi.handler.anotation.check.NeedPermission;
 import io.github.splotycode.mosaik.webapi.handler.anotation.handle.RequiredGet;
 import io.github.splotycode.mosaik.webapi.response.Response;
+import io.github.splotycode.mosaik.webapi.response.URLEncode;
 import io.github.splotycode.mosaik.webapi.response.content.ResponseContent;
 import io.github.splotycode.mosaik.webapi.response.content.file.FileResponseContent;
 import lombok.AllArgsConstructor;
@@ -20,6 +22,7 @@ import java.util.List;
 import java.util.Map;
 
 @SuppressWarnings("unused")
+@NeedPermission
 public class DeviceHandler  {
 
     @Mapping(value = "views/device")
@@ -107,7 +110,7 @@ public class DeviceHandler  {
         Device device = (Device) Controllable.FILE_SYSTEM.getEntry(deviceName);
         device.getChannelMap().put(ChannelType.fromDisplayName(type), channel);
         Controllable.FILE_SYSTEM.putEntry(deviceName, device);
-        response.redirect("/devices/settings/?name=" + deviceName, false);
+        response.redirect("/devices/settings/?name=" + URLEncode.encode(deviceName), false);
     }
 
     @Mapping("devices/deletechannel")
@@ -115,7 +118,7 @@ public class DeviceHandler  {
         Device device = (Device) Controllable.FILE_SYSTEM.getEntry(deviceName);
         device.getChannelMap().remove(ChannelType.fromDisplayName(type));
         Controllable.FILE_SYSTEM.putEntry(deviceName, device);
-        response.redirect("/devices/settings/?name=" + deviceName, false);
+        response.redirect("/devices/settings/?name=" + URLEncode.encode(deviceName), false);
     }
 
     @Mapping("devices/update")
@@ -130,7 +133,7 @@ public class DeviceHandler  {
         DeviceGroup device = (DeviceGroup) Controllable.FILE_SYSTEM.getEntry(deviceName);
         device.registerDevice((Device) add);
         Controllable.FILE_SYSTEM.putEntry(deviceName, device);
-        response.redirect("/devices/settings/?name=" + deviceName, false);
+        response.redirect("/devices/settings/?name=" + URLEncode.encode(deviceName), false);
     }
 
     @Mapping("devices/removeFromGroup")
@@ -138,7 +141,7 @@ public class DeviceHandler  {
         DeviceGroup device = (DeviceGroup) Controllable.FILE_SYSTEM.getEntry(deviceName);
         device.unregisterDevice((Device) remove);
         Controllable.FILE_SYSTEM.putEntry(deviceName, device);
-        response.redirect("/devices/settings/?name=" + deviceName, false);
+        response.redirect("/devices/settings/?name=" + URLEncode.encode(deviceName), false);
     }
 
     @Mapping("devices/editchannel")
@@ -147,7 +150,7 @@ public class DeviceHandler  {
         ChannelType channelType = ChannelType.fromDisplayName(type);
         device.getChannelMap().put(channelType, channel);
         Controllable.FILE_SYSTEM.putEntry(device.displayName(), device);
-        response.redirect("/devices/settings/?name=" + device.displayName(), false);
+        response.redirect("/devices/settings/?name=" + URLEncode.encode(device.displayName()), false);
     }
 
 }

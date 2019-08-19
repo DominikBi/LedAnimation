@@ -37,13 +37,17 @@ public class DeviceGroup implements Controllable, EntryListener {
 
     @Override
     public void setChannel(ChannelHandlerContext ctx, ChannelType channel, short value) {
-        for (Device child : devices) {
+        for (Device child : getDevices0()) {
             if (child.supportsOperation(channel)) {
                 child.setChannel(null, channel, value);
             }
         }
         WebSocketHandler.getInstance().updateValue(ctx, this, channel);
         ctx.writeAndFlush(new TextWebSocketFrame(displayName() + ":" + channel.displayName() + ":" + true));
+    }
+
+    protected Collection<Device> getDevices0() {
+        return devices;
     }
 
     public void registerDevice(Device device) {
@@ -59,7 +63,7 @@ public class DeviceGroup implements Controllable, EntryListener {
     @Override
     public Collection<ChannelType> getChannels() {
         Set<ChannelType> channels = new HashSet<>();
-        for (Device child : devices) {
+        for (Device child : getDevices0()) {
             channels.addAll(child.getChannels());
         }
         return channels;
@@ -75,7 +79,7 @@ public class DeviceGroup implements Controllable, EntryListener {
         short current = -1;
         boolean save = true;
 
-        for (Device child : devices) {
+        for (Device child : getDevices0()) {
             short val = child.getValue(type).getValue();
             if (current == -1) {
                 current = val;
@@ -87,7 +91,7 @@ public class DeviceGroup implements Controllable, EntryListener {
 
         if (!save) {
             int sum = 0;
-            for (Device child : devices) {
+            for (Device child : getDevices0()) {
                 sum += child.getValue(type).getValue();
             }
             current = (short) (sum / devices.size());

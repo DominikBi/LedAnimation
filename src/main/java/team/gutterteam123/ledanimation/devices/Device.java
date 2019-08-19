@@ -1,11 +1,9 @@
 package team.gutterteam123.ledanimation.devices;
 
-import io.github.splotycode.mosaik.util.prettyprint.PrettyPrint;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import lombok.Getter;
 import lombok.Setter;
-import team.gutterteam123.ledanimation.LedAnimation;
 import team.gutterteam123.ledanimation.server.WebSocketHandler;
 
 import java.util.Collection;

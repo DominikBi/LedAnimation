@@ -2,6 +2,7 @@ package team.gutterteam123.ledanimation.handlers;
 
 import io.github.splotycode.mosaik.util.Pair;
 import io.github.splotycode.mosaik.webapi.handler.anotation.check.Mapping;
+import io.github.splotycode.mosaik.webapi.handler.anotation.check.NeedPermission;
 import io.github.splotycode.mosaik.webapi.handler.anotation.handle.RequiredGet;
 import io.github.splotycode.mosaik.webapi.request.Request;
 import io.github.splotycode.mosaik.webapi.response.Response;
@@ -15,6 +16,7 @@ import team.gutterteam123.ledanimation.devices.*;
 import java.io.File;
 import java.util.stream.Collectors;
 
+@NeedPermission
 public class LiveHandler {
 
     @Mapping(value = "views/live")

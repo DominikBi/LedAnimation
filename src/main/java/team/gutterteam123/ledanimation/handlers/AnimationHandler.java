@@ -1,27 +1,19 @@
 package team.gutterteam123.ledanimation.handlers;
 
 import io.github.splotycode.mosaik.webapi.handler.anotation.check.Mapping;
+import io.github.splotycode.mosaik.webapi.handler.anotation.check.NeedPermission;
 import io.github.splotycode.mosaik.webapi.handler.anotation.handle.RequiredGet;
 import io.github.splotycode.mosaik.webapi.response.Response;
 import io.github.splotycode.mosaik.webapi.response.content.ResponseContent;
 import io.github.splotycode.mosaik.webapi.response.content.file.FileResponseContent;
 import io.github.splotycode.mosaik.webapi.response.content.manipulate.ManipulateableContent;
-import io.github.splotycode.mosaik.webapi.response.content.string.StaticStringContent;
-import jdk.nashorn.internal.parser.JSONParser;
 import org.json.JSONObject;
-import sun.misc.IOUtils;
 import team.gutterteam123.ledanimation.animation.Animation;
 import team.gutterteam123.ledanimation.animation.AnimationExecutor;
-import team.gutterteam123.ledanimation.animation.keyframes.KeyFrame;
-import team.gutterteam123.ledanimation.devices.Controllable;
 
 import java.io.File;
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLConnection;
-import java.util.*;
 
+@NeedPermission
 public class AnimationHandler {
 
     @Mapping(value = "views/animation")
