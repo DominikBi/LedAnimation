@@ -1,15 +1,16 @@
 function send(message) {
     if (!window.WebSocket) { return; }
-    if (socket.readyState == WebSocket.OPEN) {
+    if (socket.readyState == 1) {
         console.log("send: " + message);
         socket.send(message);
     } else {
-        alertify.error("WebSocket is closed");
+        alertify.error("Failed to send action (Closed)");
+        console.log("State " + socket.readyState)
     }
 }
 
 // SORT
-devices = $(".device");
+devices = $(".devices");
 devices.sort(function (a, b) {
       var contentA =parseInt( $(a).attr('data-prio'));
       var contentB =parseInt( $(b).attr('data-prio'));
@@ -33,9 +34,10 @@ $(".scene-form").each(function(){
         $.ajax({
             url : this.action,
             type: this.method,
-            data: $(this).serialize()
-        }).fail(function() {
-            alertify.error("Failed to play scene");
+            data: $(this).serialize(),
+            error: function (request, textStatus, errorThrown) {
+                alertify.error("Scene load Failed! " + (request.getResponseHeader('message')));
+            }
         });
     });
 });
@@ -48,7 +50,7 @@ $('.valuerange').each(function(){
                 timeout = true;
                 setTimeout(function() {
                     timeout = false;
-                }, 800);
+                }, 1500);
             }
         }
         send("?" + $(this.form).serialize());
@@ -74,11 +76,11 @@ var sortable = new Sortable(document.getElementById('live-devices'), {
 	onUpdate: function (/**Event*/evt, /**Event*/originalEvent) {
 	    var devices = new Map();
 	    var i = 0;
-	    $('.device').each(function(){
+	    $('.devices').each(function(){
 	        devices.set($(this).find("h3").text(), i);
 	        i = i + 1;
         });
-        //console.log(devices);
+        console.log(devices);
         var first = 1;
         var request = "";
         devices.forEach(function(value, key, map){
@@ -153,10 +155,12 @@ if (window.WebSocket) {
     }
     socket.onclose = function(event) {
          alertify.error("Connection closed");
+         console.log("CLOSE: " + socket.readyState)
     }
     socket.onopen = function(event) {
         alertify.success("Connected");
         send("register");
+        console.log("OPEN: " + socket.readyState)
     }
 } else {
     alert("Your browser does not support web sockets: Live update will be disabled");

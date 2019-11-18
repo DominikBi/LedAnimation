@@ -12,11 +12,11 @@ import io.github.splotycode.mosaik.webapi.server.netty.NettyWebServer;
 import io.github.splotycode.mosaik.webapi.session.Evaluators;
 import io.github.splotycode.mosaik.webapi.session.SessionSystem;
 import io.github.splotycode.mosaik.webapi.session.impl.CookieUUIDSessionMatcher;
-import io.github.splotycode.mosaik.webapi.session.impl.LocalSession;
 import io.github.splotycode.mosaik.webapi.session.impl.StaticSessionSystem;
 import lombok.Getter;
 import team.gutterteam123.ledanimation.devices.AllGroup;
 import team.gutterteam123.ledanimation.devices.Controllable;
+import team.gutterteam123.ledanimation.handlers.ErrorFactory;
 import team.gutterteam123.ledanimation.handlers.RoutingHandler;
 import team.gutterteam123.ledanimation.server.ChannelInitializer;
 import team.gutterteam123.ledanimation.user.Account;
@@ -40,7 +40,7 @@ public class LedAnimation extends Application implements WebApplicationType {
         public boolean hasPermission(Request request, String permission) {
             boolean result = super.hasPermission(request, permission);
             if (!result) {
-                request.getResponse().redirect("/login?last=" + URLEncode.encode(request.getPath()), false);
+                request.getResponse().redirect("/login?last=" + URLEncode.encode(request.getFullUrl()), false);
             }
             return result;
         }
@@ -59,6 +59,7 @@ public class LedAnimation extends Application implements WebApplicationType {
         ChannelInitializer initializer = new ChannelInitializer(webServer);
 
         setWebServer(webServer);
+        webServer.installErrorFactory(new ErrorFactory());
         webServer.getSessionLoader().register(sessionSystem);
         webServer.setChannelInitializer(initializer);
 

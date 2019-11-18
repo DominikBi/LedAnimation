@@ -1,23 +1,23 @@
 package team.gutterteam123.ledanimation.devices;
 
-import io.github.splotycode.mosaik.util.ExceptionUtil;
 import io.github.splotycode.mosaik.util.logger.Logger;
+import io.github.splotycode.mosaik.webapi.request.HandleRequestException;
 import lombok.Getter;
 import ola.OlaClient;
 
-import java.util.Arrays;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class LedHandler {
 
     @Getter private static LedHandler instance;
+    private static Throwable loadError;
 
     static {
         try {
             instance = new LedHandler();
-        } catch (Exception e) {
-            ExceptionUtil.throwRuntime(e);
+        } catch (Throwable e) {
+            loadError = e;
         }
     }
 
@@ -32,7 +32,6 @@ public class LedHandler {
     public LedHandler() throws Exception {
         instance = this;
         olaClient = new OlaClient();
-
     }
 
     public void setChannelSilent(int channel, short value, boolean masterable) {
@@ -79,6 +78,9 @@ public class LedHandler {
     }
 
     private void refresh0() {
+        if (loadError != null) {
+            throw new HandleRequestException("Controller connection was not established", loadError);
+        }
         olaClient.sendDmx(1, getOutputDMX());
     }
 

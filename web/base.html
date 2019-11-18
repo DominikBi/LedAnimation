@@ -68,7 +68,7 @@
             $.ajax({
               cache: false,
               url: "/views/" + url,
-              success:function(response){
+              success: function(response){
                 if (response.includes("<title>Login</title>")) {
                     window.location.reload(true);
                 } else {

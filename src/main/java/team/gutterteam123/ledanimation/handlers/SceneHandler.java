@@ -1,9 +1,11 @@
 package team.gutterteam123.ledanimation.handlers;
 
 import io.github.splotycode.mosaik.util.Pair;
+import io.github.splotycode.mosaik.util.StringUtil;
 import io.github.splotycode.mosaik.webapi.handler.anotation.check.Mapping;
 import io.github.splotycode.mosaik.webapi.handler.anotation.check.NeedPermission;
 import io.github.splotycode.mosaik.webapi.handler.anotation.handle.RequiredGet;
+import io.github.splotycode.mosaik.webapi.request.HandleRequestException;
 import io.github.splotycode.mosaik.webapi.request.Request;
 import io.github.splotycode.mosaik.webapi.response.Response;
 import io.github.splotycode.mosaik.webapi.response.content.ResponseContent;
@@ -12,12 +14,13 @@ import team.gutterteam123.ledanimation.devices.*;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @NeedPermission
 public class SceneHandler {
 
-    @Mapping(value = "views/scene")
+    @Mapping("views/scene")
     public ResponseContent view() {
         FileResponseContent content = new FileResponseContent(new File("web/views/scene.html"));
         for (Scene scene : Scene.FILE_SYSTEM.getEntries()) {
@@ -28,19 +31,22 @@ public class SceneHandler {
         return content;
     }
 
-    @Mapping(value = "scenes/delete")
-    public void delete(@RequiredGet(value = "name") String name, Response response){
+    @Mapping("scenes/delete")
+    public void delete(@RequiredGet("name") String name, Response response){
         Scene.FILE_SYSTEM.deleteEntry(name);
         response.redirect("/scene", false);
     }
 
-    @Mapping(value = "scenes/play")
-    public void play(@RequiredGet(value = "name") String name){
-        Scene.FILE_SYSTEM.getEntry(name).load();
+    @Mapping("scenes/play")
+    public void play(@RequiredGet("name") String name) {
+        List<String> skipped = Scene.FILE_SYSTEM.getEntry(name).load();
+        if (!skipped.isEmpty()) {
+            throw new HandleRequestException("Skipped devices: " + StringUtil.join(skipped));
+        }
     }
 
-    @Mapping(value = "scenes/create")
-    public void create(@RequiredGet(value = "name") String name, Response response) {
+    @Mapping("scenes/create")
+    public void create(@RequiredGet("name") String name, Response response) {
         Map<String, Map<ChannelType, Short>> values = new HashMap<>();
         for (Controllable controllable : Controllable.FILE_SYSTEM.getEntries()) {
             Map<ChannelType, Short> channels = new HashMap<>();
@@ -54,7 +60,7 @@ public class SceneHandler {
     }
 
     @Mapping("scenes/visible")
-    public void visible(@RequiredGet(value = "name") String name, Response response) {
+    public void visible(@RequiredGet("name") String name, Response response) {
         Scene scene = Scene.FILE_SYSTEM.getEntry(name);
         scene.setVisible(!scene.isVisible());
         Scene.FILE_SYSTEM.putEntry(name, scene);

@@ -1,7 +1,7 @@
 package team.gutterteam123.ledanimation.devices;
 
+import io.github.splotycode.mosaik.annotations.HandleAsField;
 import io.github.splotycode.mosaik.util.EnumUtil;
-import io.github.splotycode.mosaik.webapi.response.content.manipulate.HandleAsField;
 import lombok.Getter;
 
 public enum ChannelType {

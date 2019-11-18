@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 @NeedPermission
 public class LiveHandler {
 
-    @Mapping(value = "views/live")
+    @Mapping("views/live")
     public ResponseContent view(Request request) {
         FileResponseContent content = new FileResponseContent(new File("web/views/live.html"));
         content.manipulate().variable("host", request.getHeader("Host"));
@@ -64,7 +64,6 @@ public class LiveHandler {
 
     @Mapping("liveaction/updatePrio")
     public void updatePrio(Request request) {
-        System.out.println("heyy");
         request.getGet().forEach((device, o) -> {
             String value = o.iterator().next();
             Controllable controllable = Controllable.FILE_SYSTEM.getEntry(device);

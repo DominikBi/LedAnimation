@@ -1,11 +1,11 @@
 package team.gutterteam123.ledanimation.devices;
 
+import io.github.splotycode.mosaik.annotations.HandleAsField;
 import io.github.splotycode.mosaik.domparsing.annotation.DomEntry;
 import io.github.splotycode.mosaik.domparsing.annotation.FileSystem;
 import io.github.splotycode.mosaik.domparsing.annotation.parsing.SerialisedEntryParser;
 import io.github.splotycode.mosaik.runtime.LinkBase;
 import io.github.splotycode.mosaik.runtime.Links;
-import io.github.splotycode.mosaik.webapi.response.content.manipulate.HandleAsField;
 import io.netty.channel.ChannelHandlerContext;
 
 import java.io.Serializable;

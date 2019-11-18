@@ -37,13 +37,30 @@ public class DeviceGroup implements Controllable, EntryListener {
 
     @Override
     public void setChannel(ChannelHandlerContext ctx, ChannelType channel, short value) {
+        boolean wasSave = isSave(channel);
         for (Device child : getDevices0()) {
             if (child.supportsOperation(channel)) {
                 child.setChannel(null, channel, value);
             }
         }
         WebSocketHandler.getInstance().updateValue(ctx, this, channel);
-        ctx.writeAndFlush(new TextWebSocketFrame(displayName() + ":" + channel.displayName() + ":" + true));
+        /* If the Group was unsafe it is save now */
+        if (!wasSave) {
+            WebSocketHandler.getInstance().publish(ctx, displayName() + ":" + channel.displayName() + ":" + true);
+        }
+    }
+
+    private boolean isSave(ChannelType type) {
+        short current = -1;
+        for (Device child : getDevices0()) {
+            short val = child.getValue(type).getValue();
+            if (current == -1) {
+                current = val;
+            } else if (val != current) {
+                return false;
+            }
+        }
+        return true;
     }
 
     protected Collection<Device> getDevices0() {

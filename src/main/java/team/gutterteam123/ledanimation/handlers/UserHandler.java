@@ -1,7 +1,6 @@
 package team.gutterteam123.ledanimation.handlers;
 
 import io.github.splotycode.mosaik.util.Pair;
-import io.github.splotycode.mosaik.util.StringUtil;
 import io.github.splotycode.mosaik.webapi.handler.anotation.check.Mapping;
 import io.github.splotycode.mosaik.webapi.handler.anotation.check.NeedPermission;
 import io.github.splotycode.mosaik.webapi.handler.anotation.handle.Get;
@@ -13,9 +12,7 @@ import io.github.splotycode.mosaik.webapi.response.Response;
 import io.github.splotycode.mosaik.webapi.response.content.ResponseContent;
 import io.github.splotycode.mosaik.webapi.response.content.file.CachedStaticFileContent;
 import io.github.splotycode.mosaik.webapi.response.content.file.FileResponseContent;
-import io.github.splotycode.mosaik.webapi.session.impl.CookieUUIDSessionMatcher;
 import team.gutterteam123.ledanimation.LedAnimation;
-import team.gutterteam123.ledanimation.devices.Scene;
 import team.gutterteam123.ledanimation.user.Account;
 import team.gutterteam123.ledanimation.user.LedSession;
 import team.gutterteam123.ledanimation.user.PasswordCryptor;
@@ -39,13 +36,19 @@ public class UserHandler {
                         @RequiredPost("password") String password,
                         @Post("redirect") String redirect,
                         Request request, Response response) {
+        if (redirect == null) {
+            redirect = "/";
+        }
+
+        if (request.getSession() != null) {
+            response.redirect(redirect, false);
+            return;
+        }
+
         Account account = Account.FILE_SYSTEM.getEntry(name);
         if (account != null && PasswordCryptor.passwordMatch(account, password)) {
             LedAnimation.getInstance().getSessionSystem().start(request);
             ((LedSession) request.getSession()).setAccount(account);
-            if (StringUtil.isEmpty(redirect) || redirect.equals("null")) {
-                redirect = "/";
-            }
             response.redirect(redirect, false);
         } else {
             response.redirect("/login", false);

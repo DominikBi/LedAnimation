@@ -9,6 +9,9 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 @Getter
@@ -28,13 +31,24 @@ public class Scene implements Serializable  {
 
     @Getter @Setter private boolean visible;
 
-    public void load() {
+    public List<String> load() {
+        List<String> failedDevices = null;
         for (Map.Entry<String, Map<ChannelType, Short>> device : values.entrySet()) {
             Controllable dev = Controllable.FILE_SYSTEM.getEntry(device.getKey());
+
+            if (dev == null) {
+                if (failedDevices == null) {
+                    failedDevices = new ArrayList<>();
+                }
+                failedDevices.add(device.getKey());
+                continue;
+            }
+
             for (Map.Entry<ChannelType, Short> channel : device.getValue().entrySet()) {
                 dev.setChannel(null, channel.getKey(), channel.getValue());
             }
         }
+        return failedDevices == null ? Collections.emptyList() : failedDevices;
     }
 
 

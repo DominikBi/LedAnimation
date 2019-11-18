@@ -41,9 +41,10 @@
             e.preventDefault();
             $.ajax({
                 url: $(this).attr("href"),
-                type: 'get'
-            }).fail(function() {
-                alertify.error("Failed to play scene");
+                type: 'get',
+                error: function (request, textStatus, errorThrown) {
+                    alertify.error("Scene load Failed! " + (request.getResponseHeader('message')));
+                }
             });
         });
     });
